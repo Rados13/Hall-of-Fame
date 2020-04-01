@@ -37,7 +37,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="C:\Users\Radek\git\Hall-of-Fame"
+VIRTUAL_ENV="C:\Users\Radek\git\Hall-of-Fame\backend"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
@@ -54,8 +54,8 @@ fi
 
 if [ -z "${VIRTUAL_ENV_DISABLE_PROMPT:-}" ] ; then
     _OLD_VIRTUAL_PS1="${PS1:-}"
-    if [ "x(Hall-of-Fame) " != x ] ; then
-	PS1="(Hall-of-Fame) ${PS1:-}"
+    if [ "x(backend) " != x ] ; then
+	PS1="(backend) ${PS1:-}"
     else
     if [ "`basename \"$VIRTUAL_ENV\"`" = "__" ] ; then
         # special case for Aspen magic directories

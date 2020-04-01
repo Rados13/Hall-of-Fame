@@ -27,7 +27,7 @@ function global:deactivate ([switch]$NonDestructive) {
 
 deactivate -nondestructive
 
-$env:VIRTUAL_ENV="C:\Users\Radek\git\Hall-of-Fame"
+$env:VIRTUAL_ENV="C:\Users\Radek\git\Hall-of-Fame\backend"
 
 if (! $env:VIRTUAL_ENV_DISABLE_PROMPT) {
     # Set the prompt to include the env name
@@ -35,7 +35,7 @@ if (! $env:VIRTUAL_ENV_DISABLE_PROMPT) {
     function global:_OLD_VIRTUAL_PROMPT {""}
     copy-item function:prompt function:_OLD_VIRTUAL_PROMPT
     function global:prompt {
-        Write-Host -NoNewline -ForegroundColor Green '(Hall-of-Fame) '
+        Write-Host -NoNewline -ForegroundColor Green '(backend) '
         _OLD_VIRTUAL_PROMPT
     }
 }
