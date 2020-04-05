@@ -20,6 +20,7 @@ from rest_framework_jwt.views import obtain_jwt_token
 
 urlpatterns = [
     path('api/customusers/', include('customusers.api.urls', namespace='api-customusers', )),
+    path('api/groups/', include('groups.api.urls', namespace='api-groups', )),
     path('api/auth/login', obtain_jwt_token,name='api-login'),
     path('admin/', admin.site.urls),
 ]

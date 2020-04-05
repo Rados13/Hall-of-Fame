@@ -6,7 +6,7 @@ from rest_framework.test import APITestCase
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
-from users.models import CustomUser
+# from users.models import CustomUser
 
 
 class StudentAPITestCase(APITestCase):
@@ -14,9 +14,9 @@ class StudentAPITestCase(APITestCase):
         user_obj = User(username='testUser', email='test@test.com')
         user_obj.set_password("randPassword")
         user_obj.save()
-        student = Student.objects.create(user=user_obj,
-                                         name='John',
-                                         surname='Snow'
+        student = User.objects.create(user=user_obj,
+                                         first_name='John',
+                                         last_name='Snow'
                                          )
 
         def test_single_user(self):
@@ -24,6 +24,6 @@ class StudentAPITestCase(APITestCase):
             self.asserEqual(user_count, 1)
 
         def test_single_student(self):
-            student_count = Student.objects.count()
+            student_count = User.objects.count()
             self.asserEqual(student_count, 1)
 

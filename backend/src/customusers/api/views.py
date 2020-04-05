@@ -1,9 +1,9 @@
 from rest_framework import generics, mixins
-# from ..models import CustomUser
 from .serializers import CustomUserSerializer
 from djongo.models import Q
 from .permissions import IsOwnerOrReadOnly
 from django.contrib.auth import get_user_model
+from ..models import CustomUser
 
 
 class UserAPIView(mixins.CreateModelMixin, generics.ListAPIView):
@@ -14,6 +14,7 @@ class UserAPIView(mixins.CreateModelMixin, generics.ListAPIView):
 
     def get_queryset(self):
         queryset = get_user_model().objects.all()
+        # queryset = CustomUser.objects.all()
         query = self.request.GET.get("q")
         if query is not None:
             queryset = queryset.filter(Q(name__icontains=query)).distinct()
@@ -41,6 +42,7 @@ class UserRUDView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         return get_user_model().objects.all()
+        # return CustomUser.objects.all()
 
     def get_serializer_context(self, *args, **kwargs):
         return {"request": self.request}
@@ -48,4 +50,3 @@ class UserRUDView(generics.RetrieveUpdateDestroyAPIView):
     # def get_object(self):
     #     pk = self.kwargs.get("pk")
     #     return CustomUser.objects.all(pk=pk)
-
