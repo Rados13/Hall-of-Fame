@@ -11,7 +11,7 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 class UserAPIView(mixins.CreateModelMixin, generics.ListAPIView):
     lookup_field = 'pk'
     serializer_class = CustomUserSerializer
-    permission_classes = [IsOwnerOrReadOnly, ]
+    permission_classes = [IsOwnerOrReadOnly,]
     search_fields = ['first_name']
     filter_backends = [SearchFilter, OrderingFilter]
 
