@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <Login v-if="token===null"/>
-    <StudentList v-if="token!==null" v-bind:students='students' v-on:del-student="deleteStudent" @token-event = 'setToken'/>
+    <Login v-if="!this.token" @token-event = 'setToken'/>
+    <StudentList v-if="this.token" v-bind:students='students' v-on:del-student="deleteStudent" />
     
   </div>
 </template>
@@ -12,8 +12,7 @@ import axios from 'axios';
 import StudentList from './components/StudentList';
 import Login from './components/Login';
 
-const baseURL = 'http://127.0.0.1:8000/api/students/';
-// const addURL = 'http://127.0.0.1:8000/api/students/';
+const baseURL = 'http://127.0.0.1:8000/api/users/';
 
 export default {
   name: 'App',
@@ -23,21 +22,24 @@ export default {
   },
   data(){
     return {
-      token: null,
+      token: false,
       students: [],
-      studentName: ''
-    }
-  },
-  async created(){
-    try{
-      const res = await axios.get(baseURL);
-
-      this.students = res.data;
-    }catch(e){
-      console.error(e);
+      studentName: '',
     }
   },
   methods: {
+    async getUsers(){
+        try{
+        await axios.get(baseURL,{
+          headers: {Authorization: `Bearer ${localStorage.getItem("accessToken")}`}
+        }).then(response =>{
+          console.log(response.data);
+          this.students = response.data;
+        });
+      }catch(e){
+        console.error(e);
+      }  
+    },
     async addStudent(){
       const res = await axios.post(baseURL,{Name: this.studentName});
       this.students = [...this.students,res.data];
@@ -47,10 +49,11 @@ export default {
       console.log(this.students);
       this.students = this.students.filter(student => student.id !== id);
     },
-    setToken(token){
-      console.log("Whatever");
-      console.log(token);
-      this.token = token;
+    setToken(result){
+      if(result==true){
+        this.getUsers();
+        this.token = true;
+      }
     }
   }
 }

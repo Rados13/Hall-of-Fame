@@ -3,7 +3,7 @@
     <div class="list-item"> 
         <p>
             <input type="checkbox" v-on:change="markComplete">
-            {{student.name}} {{student.surname}}
+            {{student.first_name}} {{student.last_name}}
             <button @click="$emit('del-student',student.id)" class='del'>X</button>    
         </p> 
     </div>
@@ -15,6 +15,7 @@ export default {
     props: ['student'],
     methods:{
         markComplete(){
+            console.log()
             console.log(123)
         }
     }
