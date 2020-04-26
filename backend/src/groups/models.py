@@ -3,7 +3,6 @@ from django import forms
 from django.urls import reverse
 from rest_framework.reverse import reverse as api_reverse
 
-
 # Create your models here.
 
 class DayTime(models.Model):
@@ -86,9 +85,11 @@ class LectureForm(forms.ModelForm):
 class Group(models.Model):
     course = models.CharField(max_length=120)
     date_time = models.ArrayField(model_container=DayTime, blank=True, null=True)
-    lecturers_list = models.ArrayField(model_container=Lecture, blank=True, null=True)
+    lectures_list = models.ArrayField(model_container=Lecture, blank=True, null=True)
     enrolled_list = models.ArrayField(model_container=Enrolled, blank=True, null=True)
     objects = models.DjongoManager()
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+

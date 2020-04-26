@@ -10,3 +10,5 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
             return True
         # Some condition
         return False
+
+

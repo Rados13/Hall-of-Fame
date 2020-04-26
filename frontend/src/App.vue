@@ -2,8 +2,6 @@
   <div id="app">
     <NavbarApp/>
     <router-view></router-view>
-    <!-- <Login v-if="this.token==null" @token-event = 'setToken'/> -->
-    <!-- <StudentList v-if="this.token!=null" v-bind:students='students' v-on:del-student="deleteStudent" /> -->
     
   </div>
 </template>
@@ -11,8 +9,6 @@
 <script>
 
 import axios from 'axios';
-// import StudentList from './components/StudentList';
-// import Login from './components/Login';
 import NavbarApp from './components/Navbar';
 
 const baseURL = 'http://127.0.0.1:8000/api/users/';
@@ -20,8 +16,6 @@ const baseURL = 'http://127.0.0.1:8000/api/users/';
 export default {
   name: 'App',
   components:{
-    // StudentList,
-    // Login,
     NavbarApp,
   },
   data(){

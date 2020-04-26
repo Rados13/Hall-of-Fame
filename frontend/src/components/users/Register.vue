@@ -14,7 +14,7 @@
 
 <script>
 
-import Entry from '../services/Entry.js';
+import Entry from '../../services/Entry';
 
 
 export default {

@@ -2,7 +2,7 @@
     <!-- <div v-bind:class="{'styleclass':value}"> If value is True set styleclass on this div -->
     <div class="list-item"> 
         <p>
-            <input type="checkbox" v-on:change="markComplete">
+            <!-- <input type="checkbox" v-on:change="markComplete"> -->
             {{student.first_name}} {{student.last_name}}
             <button @click="$emit('del-student',student.id)" class='del'>X</button>    
         </p> 
@@ -13,12 +13,6 @@
 export default {
     name: "StudentElem",
     props: ['student'],
-    methods:{
-        markComplete(){
-            console.log()
-            console.log(123)
-        }
-    }
 }
 </script>
 

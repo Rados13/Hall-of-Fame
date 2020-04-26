@@ -2,8 +2,7 @@
   <div class="hello">
     <h1>Hello world</h1>
   <div v-bind:key="student.id" v-for="student in students">
-    <!-- <h3>{{student.name}}   {{student.surname}}</h3> -->
-    <StudentElem v-bind:student = "student" v-on:del-student="$emit('del-student',student.id)"/>
+    <StudentElem v-bind:student = "student" v-on:del-student="deleteUser(student.id)"/>
   </div>
   </div>
 </template>

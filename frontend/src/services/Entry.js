@@ -30,4 +30,7 @@ export default class Entry{
             console.log(error);
         });  
     }
+    refreshToken(){
+        axios.post()
+    }
 }
