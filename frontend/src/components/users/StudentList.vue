@@ -9,34 +9,34 @@
 
 <script>
 
-    import StudentElem from './StudentElem.vue';
-    import Entry from "../../services/Entry";
-    // import axios from 'axios';
+import StudentElem from './StudentElem.vue';
+import Entry from '../../services/Entry.js';
 
     const baseURL = 'http://127.0.0.1:8000/api/users/';
 
-    export default {
-        name: 'StudentList',
-        components: {
-            StudentElem
-        },
-        data() {
-            return {
-                students: []
-            }
-        },
-        // props: ['students'],
-        created() {
-            this.getUsers();
-        },
-        methods: {
-
-            getUsers() {
-                Entry.sendGet(baseURL).then(r => {this.students = r.data; this.$forceUpdate();}, r => console.log(r));
+export default {
+    name: 'StudentList',
+    components: {
+        StudentElem
+    },
+    data() {
+        return {
+            students: []
+        }
+    },
+    // props: ['students'],
+    created() {
+        this.getUsers();
+        // new Entry().getUsers().then(data=> this.students = data);
+    },
+    methods: {
+        getUsers() {
+            Entry.sendGet(baseURL).then(r => {this.students = r.data; this.$forceUpdate();}, r => console.log(r));
                 // console.log();
-            }
         }
     }
+  
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

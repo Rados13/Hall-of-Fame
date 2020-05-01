@@ -10,6 +10,9 @@ class DayTime(models.Model):
     time = models.TimeField()
     objects = models.DjongoManager()
 
+    def __iter__(self):
+        yield 'day_of_week', self.day_of_week
+        yield 'time', self.time
     # class Meta:
     #     abstract = True
 
@@ -18,7 +21,6 @@ class DayTimeForm(forms.ModelForm):
     class Meta:
         model = DayTime
         fields = ('day_of_week', 'time')
-
 
 class Mark(models.Model):
     value = models.IntegerField()
@@ -72,6 +74,9 @@ class Lecture(models.Model):
     main_lecture = models.BooleanField(default=True)
     objects = models.DjongoManager()
 
+    def __iter__(self):
+        yield 'lecture_id', self.lecture_id
+        yield 'main_lecture', self.main_lecture
     # class Meta:
     #     abstract = True
 

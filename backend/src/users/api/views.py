@@ -17,13 +17,13 @@ class UserAPIView(mixins.CreateModelMixin, generics.ListAPIView):
 
     def get_queryset(self):
         queryset = User.objects.all()
-        result = []
-        perms = IsOwnerOrReadOnly()
-        for elem in queryset:
-            if perms.has_object_permission(self.request,self,elem):
-                result.append(elem)
-        return result
-        # return queryset
+        # result = []
+        # perms = IsOwnerOrReadOnly()
+        # for elem in queryset:
+        #     if perms.has_object_permission(self.request,self,elem):
+        #         result.append(elem)
+        # return result
+        return queryset
 
     def perform_create(self, serializer):
         serializer.save()

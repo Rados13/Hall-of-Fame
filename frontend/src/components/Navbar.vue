@@ -3,7 +3,7 @@
     <ul > <router-link to="/login">Login</router-link></ul>
     <ul> <router-link to="/register">Register</router-link></ul>
     <ul> <router-link to="/students">User data</router-link> </ul>
-    <ul> <router-link to="/addGroup">Add group</router-link> </ul>
+    <ul> <router-link to="/addGroup">Create group</router-link> </ul>
     <ul> <router-link to="/groups">Groups list</router-link> </ul>
     </div>
 </template>

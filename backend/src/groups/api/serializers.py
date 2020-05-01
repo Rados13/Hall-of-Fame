@@ -105,6 +105,17 @@ class GroupSerializer(serializers.ModelSerializer):
                          enrolled_list=enrolled_list)
         return user_obj
 
+    def update(self, instance, validated_data):
+        if 'course' in validated_data:
+            instance.course = validated_data['course']
+        if 'date_time' in validated_data:
+            instance.date_time = list(map(lambda elem: DayTime(**elem), validated_data['date_time']))
+        if 'lectures_list' in validated_data:
+            instance.lectures_list = list(map(lambda elem: Lecture(**elem), validated_data['lectures_list']))
+        if 'enrolled_list' in validated_data:
+            instance.enrolled_list = list(map(lambda elem: Enrolled(*elem), validated_data['enrolled_list']))
+        return instance
+
 
 
 
