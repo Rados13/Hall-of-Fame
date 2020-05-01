@@ -10,8 +10,7 @@
 <script>
 
 import StudentElem from './StudentElem.vue';
-import axios from 'axios';
-const baseURL = 'http://127.0.0.1:8000/api/users/';
+import Entry from '../../services/Entry.js';
 
 export default {
   name: 'StudentList',
@@ -26,22 +25,9 @@ export default {
   // props: ['students'],
   created(){
     console.log("Happen");
-    this.getUsers();
+    new Entry().getUsers().then(data=> this.students = data);
   },
-  methods:{
-  async getUsers(){
-    console.log("Start");
-        try{
-        await axios.get(baseURL,{
-          headers: {Authorization: `Bearer ${localStorage.getItem("accessToken")}`}
-        }).then(response =>{
-          this.students = response.data;
-        });
-      }catch(e){
-        console.error(e);
-      }  
-    },
-  }
+  
 }
 </script>
 

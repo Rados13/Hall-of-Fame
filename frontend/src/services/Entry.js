@@ -33,4 +33,19 @@ export default class Entry{
     refreshToken(){
         axios.post()
     }
+
+    async getUsers(){
+        return await axios.get(registerURL,{
+            headers: {Authorization: `Bearer ${localStorage.getItem("accessToken")}`}
+        }).then(response =>{
+            return response.data;
+        }).catch(e => {
+        console.error(e);
+        });  
+    }
+    async getUser(firstName,lastName){
+        var users;
+        await this.getUsers().then(data => users = data);
+        return users.filter(user => (user.first_name === firstName && user.last_name===lastName));    
+    }
 }

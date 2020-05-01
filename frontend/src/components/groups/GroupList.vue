@@ -2,7 +2,7 @@
   <div class="hello">
     <h1>Hello world</h1>
   <div v-bind:key="group.pk" v-for="group in groups">
-    <GroupElem v-bind:group = "group" v-on:del-group="deleteGroup" v-on:sign-group="signFor"/>
+    <GroupElem v-bind:group = "group"/>
   </div>
   </div>
 </template>
@@ -10,8 +10,9 @@
 <script>
 
 import GroupElem from './GroupElem.vue';
-import axios from 'axios';
-const baseURL = 'http://127.0.0.1:8000/api/groups/';
+import GroupRUD from '../../services/GroupRUD.js';
+
+
 export default {
   name: 'GroupList',
   components:{
@@ -22,41 +23,10 @@ export default {
       groups: []
     }
   },
-  // props: ['students'],
   created(){
-    this.getGroups();
-  },
-  methods:{
-  async getGroups(){
-    console.log("Start");
-        try{
-        await axios.get(baseURL,{
-          headers: {Authorization: `Bearer ${localStorage.getItem("accessToken")}`}
-        }).then(response =>{
-          this.groups = response.data;
-          console.log(response.data);
-        });
-      }catch(e){
-        console.error(e);
-      }  
-    },
-    delteGroup(id){
-        console.log("Delete"+ id+"\n");
-    },
-    async signFor(id){
-      console.log(id);
-      try{
-        await axios.post(baseURL+id+"/student/",{
-          headers: {Authorization: `Bearer ${localStorage.getItem("accessToken")}`},
-        }).then(response => {
-          console.log(response.data);
-        });
-      }catch(e){
-        console.error(e);
-      }
-    }
-
+    GroupRUD.getGroups().then(data => this.groups = data);
   }
+  
 }
 </script>
 

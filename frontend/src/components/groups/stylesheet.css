@@ -1,0 +1,35 @@
+.list-item{
+    background: #f4f4f4;
+    padding: 10px;
+    border-bottom: 1px #ccc dotted;
+}
+
+
+.button{
+background: #ff0000;
+color: #fff;
+border: none;
+padding: 5px 9px;
+margin-left: 5%;
+cursor: pointer;        
+}
+
+.del {
+background: #ff0000;
+color: #fff;
+border: none;
+padding: 5px 9px;
+border-radius: 50%;
+cursor: pointer;
+float: right;
+}
+
+.buttons{
+    display: flex;
+    flex-flow: row;
+    justify-content: center;
+}
+
+.oneLine{
+    display: inline;
+}

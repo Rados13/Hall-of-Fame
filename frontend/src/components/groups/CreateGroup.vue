@@ -5,7 +5,6 @@
     <p><input type='text' placeholder="Course" v-model='course'></p>
     <p><input type='text' placeholder="Day of week" v-model='dayOfWeek'></p>
     <p><input type='text' placeholder="Time" v-model='time'></p>
-    <p><input type='text' placeholder="Lecturer" v-model='lecture'></p>
     <p><input type='submit' value='Submit' ></p>
     </form>
   </div>
@@ -31,8 +30,10 @@ export default {
   },
   methods: {
     addGroup(){
-        axios.post(url,{course: this.course, date_time: [{day_of_week: this.dayOfWeek,time: this.time}],
-        lectures_list: [{lecture_id: this.lecture,main_lecture: true}],enrolled_list: []}).then(() =>{
+        axios.post(url,{
+          headers: {Authorization: `Bearer ${localStorage.getItem("accessToken")}`},
+          course: this.course, date_time: [{day_of_week: this.dayOfWeek,time: this.time}],enrolled_list: []
+          }).then(() =>{
             console.log("Work")
         }).catch(error => {
             console.log(error);

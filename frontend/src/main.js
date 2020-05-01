@@ -6,7 +6,7 @@ import StudentList from './components/users/StudentList.vue'
 import Register from './components/users/Register.vue'
 import CreateGroup from './components/groups/CreateGroup.vue'
 import GroupList from './components/groups/GroupList.vue'
-
+import GroupPanel from './components/groups/GroupPanel.vue'
 Vue.config.productionTip = false
 
 Vue.use(VueRouter)
@@ -16,7 +16,8 @@ const routes = [
   { path: '/register', component: Register },
   { path: '/students', component: StudentList },
   { path: '/addGroup', component: CreateGroup },
-  { path: '/groups', component: GroupList }
+  { path: '/groups', component: GroupList },
+  { path: '/groups/:groupID', component: GroupPanel }
 ]
 const router = new VueRouter({
   routes,

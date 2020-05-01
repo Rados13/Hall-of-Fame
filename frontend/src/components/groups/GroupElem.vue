@@ -6,50 +6,42 @@
         <div v-bind:key="dateTime.day_of_week" v-for="dateTime in group.date_time">    
             <p> Day: {{dateTime.day_of_week}} hour of start: {{dateTime.time}}</p>
         </div>    
-        <div v-bind:key="lecture.lecture_id" v-for="lecture in group.lectures_list">    
-            <p> Lecture: {{lecture.lecture_id}}</p>
+        <div v-bind:key="lecture.lecture_id" v-for="lecture in lectures">    
+            <p> Lecture: {{lecture.first_name}}  {{lecture.last_name}}</p>
         </div>    
         <div class="buttons">
-        <button @click="$emit('del-group',group.pk)" class='del'>X</button>    
-        <button @click="$emit('sign-group',group.pk)" class='signForGroup'>Sign for course</button>   
+        <button @click="signFor(group.pk)" class='button'>Sign for course</button>
+        <button @click="goToGroupPanel(group.pk)" class='button'>Go to group panel</button>    
         </div>
     </div>
 </template>
 
 <script>
+
+import GroupRUD from '../../services/GroupRUD.js';
+
 export default {
     name: "GroupElem",
     props: ['group'],
+    data(){
+    return {
+        lectures: []
+      }
+    },
+    created(){
+        GroupRUD.getGroupLecturesNames(this.group.lectures_list).then(data=> this.lectures=data).catch(e=>console.log(e));     
+    },
+    methods:{ 
+      goToGroupPanel(id){
+          this.$router.push('/groups/'+id);
+      },
+      signFor(id){
+        GroupRUD.signFor(id);
+      }
+    }
 }
 </script>
 
 <style scoped>
-    .list-item{
-        background: #f4f4f4;
-        padding: 10px;
-        border-bottom: 1px #ccc dotted;
-    }
-
-    .del {
-    background: #ff0000;
-    color: #fff;
-    border: none;
-    padding: 5px 9px;
-    border-radius: 50%;
-    cursor: pointer;
-    }
-    
-    .signForGroup{
-    background: #ff0000;
-    color: #fff;
-    border: none;
-    padding: 5px 9px;
-    margin-left: 5%;
-    cursor: pointer;        
-    }
-    .buttons{
-        display: flex;
-        flex-flow: row;
-        justify-content: center;
-    }
+@import './stylesheet.css';    
 </style>
