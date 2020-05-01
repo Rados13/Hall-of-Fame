@@ -11,6 +11,8 @@
 
 import GroupElem from './GroupElem.vue';
 import axios from 'axios';
+import Entry from "../../services/Entry";
+
 const baseURL = 'http://127.0.0.1:8000/api/groups/';
 export default {
   name: 'GroupList',
@@ -29,16 +31,17 @@ export default {
   methods:{
   async getGroups(){
     console.log("Start");
-        try{
-        await axios.get(baseURL,{
-          headers: {Authorization: `Bearer ${localStorage.getItem("accessToken")}`}
-        }).then(response =>{
-          this.groups = response.data;
-          console.log(response.data);
-        });
-      }catch(e){
-        console.error(e);
-      }  
+      //   try{
+      //   await axios.get(baseURL,{
+      //     headers: {Authorization: `Bearer ${localStorage.getItem("accessToken")}`}
+      //   }).then(response =>{
+      //     this.groups = response.data;
+      //     console.log(response.data);
+      //   });
+      // }catch(e){
+      //   console.error(e);
+      // }
+        Entry.sendGet(baseURL).then(response =>{this.groups = response.data}, e => console.error(e))
     },
     delteGroup(id){
         console.log("Delete"+ id+"\n");

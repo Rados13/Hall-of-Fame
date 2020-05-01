@@ -9,10 +9,23 @@
 </template>
 
 <script>
+
+
 export default {
     name: 'NavbarApp',
     components:{
-    },
+    }
 }
 </script>
+
+<style scoped>
+    * {
+        display: flex;
+        margin: 0 10px 0 0;
+        padding: 0;
+        list-style: none;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+</style>
 

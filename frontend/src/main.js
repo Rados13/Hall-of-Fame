@@ -12,19 +12,19 @@ Vue.config.productionTip = false
 Vue.use(VueRouter)
 
 const routes = [
-  { path: '/login', component: Login },
-  { path: '/register', component: Register },
-  { path: '/students', component: StudentList },
-  { path: '/addGroup', component: CreateGroup },
-  { path: '/groups', component: GroupList }
+    {path: '/login', component: Login},
+    {path: '/register', component: Register},
+    {path: '/students', component: StudentList},
+    {path: '/addGroup', component: CreateGroup},
+    {path: '/groups', component: GroupList}
 ]
 const router = new VueRouter({
-  routes,
-  mode:'history'
+    routes,
+    mode: 'history'
 })
 
 new Vue({
-  el: '#app',
-  router,
-  render: h => h(App),
+    el: '#app',
+    router,
+    render: h => h(App),
 }).$mount('#app')
