@@ -2,6 +2,9 @@
     background: #f4f4f4;
     padding: 10px;
     border-bottom: 1px #ccc dotted;
+    display: flex;
+    flex-flow: column;
+    justify-content: space-between;
 }
 
 
@@ -10,7 +13,8 @@ background: #ff0000;
 color: #fff;
 border: none;
 padding: 5px 9px;
-margin-left: 5%;
+margin: 1%;
+align-self: center;
 cursor: pointer;        
 }
 

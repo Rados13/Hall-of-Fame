@@ -7,6 +7,8 @@ import Register from './components/users/Register.vue'
 import CreateGroup from './components/groups/CreateGroup.vue'
 import GroupList from './components/groups/GroupList.vue'
 import GroupPanel from './components/groups/GroupPanel.vue'
+import GroupStudentPanel from './components/groups/GroupStudentPanel.vue'
+
 Vue.config.productionTip = false
 
 Vue.use(VueRouter)
@@ -17,7 +19,10 @@ const routes = [
   { path: '/students', component: StudentList },
   { path: '/addGroup', component: CreateGroup },
   { path: '/groups', component: GroupList },
-  { path: '/groups/:groupID', component: GroupPanel }
+  { path: '/studentgroups', component: GroupList, props:{default: true, student:true}},
+  { path: '/studentgroups/:groupID', component: GroupStudentPanel, props: {default: true,student: true}},
+  { path: '/lecturegroups', component: GroupList, props:{default: true, lecture:true}},
+  { path: '/lecturegroups/:groupID', component: GroupPanel, props: {default: true,student: true}}
 ]
 const router = new VueRouter({
     routes,

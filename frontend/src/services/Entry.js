@@ -47,7 +47,7 @@ export default class Entry {
     static async refreshToken() {
         return axios.post(refreshURL, {refresh: localStorage.getItem("refreshToken")}).then(response => {
             localStorage.setItem("accessToken", response.data.access);
-        })
+        });
     }
 
     // static async refreshToken() {

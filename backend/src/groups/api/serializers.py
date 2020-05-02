@@ -1,6 +1,5 @@
 from rest_framework import serializers
 
-
 # from ..models import CustomUser
 from groups.models import *
 
@@ -35,6 +34,7 @@ class InattendenceSerializer(serializers.ModelSerializer):
             'justified': {'required': False, 'allow_null': True},
         }
 
+
 class MarkSerializer(serializers.ModelSerializer):
     class Meta:
         model = Mark
@@ -49,9 +49,10 @@ class MarkSerializer(serializers.ModelSerializer):
             'note': {'required': False, 'allow_null': True},
         }
 
+
 class EnrolledSerializer(serializers.ModelSerializer):
-    inattendances_list = serializers.ListField(child=InattendenceSerializer(),allow_null=True)
-    marks_list = serializers.ListField(child=MarkSerializer(),allow_null=True)
+    inattendances_list = serializers.ListField(child=InattendenceSerializer(), allow_null=True)
+    marks_list = serializers.ListField(child=MarkSerializer(), allow_null=True)
 
     class Meta:
         model = Enrolled
@@ -67,12 +68,11 @@ class EnrolledSerializer(serializers.ModelSerializer):
         }
 
 
-
 class GroupSerializer(serializers.ModelSerializer):
     # uri = serializers.SerializerMethodField(read_only=True)
     lectures_list = serializers.ListField(child=LectureSerializer())
-    date_time = serializers.ListField(child=DayTimeSerializer(),allow_null=True)
-    enrolled_list = serializers.ListField(child=EnrolledSerializer(),allow_null=True)
+    date_time = serializers.ListField(child=DayTimeSerializer(), allow_null=True)
+    enrolled_list = serializers.ListField(child=EnrolledSerializer(), allow_null=True)
 
     class Meta:
         model = Group
@@ -113,15 +113,18 @@ class GroupSerializer(serializers.ModelSerializer):
         if 'lectures_list' in validated_data:
             instance.lectures_list = list(map(lambda elem: Lecture(**elem), validated_data['lectures_list']))
         if 'enrolled_list' in validated_data:
-            instance.enrolled_list = list(map(lambda elem: Enrolled(*elem), validated_data['enrolled_list']))
+            instance.enrolled_list = list(map(lambda elem: self.create_enrolled_from_json(**elem),
+                                              validated_data['enrolled_list']))
         return instance
 
-
-
+    def create_enrolled_from_json(self, *args, **kwargs):
+        print(kwargs)
+        return Enrolled(
+            user_id=kwargs.get('user_id'),
+            inattendances_list=list(map(lambda elem: Inattendence(**elem), kwargs.get('inattendances_list'))),
+            marks_list=list(map(lambda elem: Mark(**elem), kwargs.get('marks_list')))
+        )
 
     def get_uri(self, obj):
         request = self.context.get("request")
         return obj.get_api_uri(request)
-
-
-

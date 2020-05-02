@@ -5,6 +5,8 @@
     <ul> <router-link to="/students">User data</router-link> </ul>
     <ul> <router-link to="/addGroup">Create group</router-link> </ul>
     <ul> <router-link to="/groups">Groups list</router-link> </ul>
+    <ul> <router-link to="/lecturegroups">My lecture groups</router-link> </ul>
+    <ul> <router-link to="/studentgroups">My student groups</router-link> </ul>
     </div>
 </template>
 

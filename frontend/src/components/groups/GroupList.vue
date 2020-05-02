@@ -2,7 +2,7 @@
   <div class="hello">
     <h1>Hello world</h1>
   <div v-bind:key="group.pk" v-for="group in groups">
-    <GroupElem v-bind:group = "group"/>
+    <GroupElem v-bind:group = "group" v-bind:isLecture="lecture" v-bind:isStudent="student"/>
   </div>
   </div>
 </template>
@@ -18,13 +18,17 @@ export default {
   components:{
     GroupElem
   },
+  props: ['lecture','student'],
   data(){
     return {
       groups: []
     }
   },
   created(){
-    GroupRUD.getGroups().then(data => this.groups = data);
+    console.log(this.my);
+    if(this.student){ GroupRUD.getStudentGroups().then(data=> this.groups = data);}
+    else if(this.lecture){ GroupRUD.getLectureGroups().then(data=> this.groups =data);  }
+    else{ GroupRUD.getGroups().then(data => this.groups = data); }
   }
   
 }

@@ -10,8 +10,9 @@
             <p> Lecture: {{lecture.first_name}}  {{lecture.last_name}}</p>
         </div>    
         <div class="buttons">
-        <button @click="signFor(group.pk)" class='button'>Sign for course</button>
-        <button @click="goToGroupPanel(group.pk)" class='button'>Go to group panel</button>    
+        <button v-if="!isStudent && !isLecture" @click="signFor(group.pk)" class='button'>Sign for course</button>
+        <button v-if="isStudent" @click="goToStudentPanel(group.pk)" class='button'>Show my grades and inattendace</button>    
+        <button v-if="isLecture" @click="goToGroupPanel(group.pk)" class='button'>Go to group panel</button>    
         </div>
     </div>
 </template>
@@ -22,22 +23,26 @@ import GroupRUD from '../../services/GroupRUD.js';
 
 export default {
     name: "GroupElem",
-    props: ['group'],
+    props: ['group','isStudent','isLecture'],
     data(){
     return {
-        lectures: []
+        lectures: [],
       }
     },
     created(){
-        GroupRUD.getGroupLecturesNames(this.group.lectures_list).then(data=> this.lectures=data).catch(e=>console.log(e));     
+        GroupRUD.getGroupLecturesNames(this.group.lectures_list).then(data=> this.lectures=data).catch(e=>console.log(e));
     },
     methods:{ 
       goToGroupPanel(id){
-          this.$router.push('/groups/'+id);
+          this.$router.push('/lecturegroups/'+id);
+      },
+      goToStudentPanel(id){
+          this.$router.push('/studentgroups/'+id);
       },
       signFor(id){
         GroupRUD.signFor(id);
-      }
+      },
+    
     }
 }
 </script>
