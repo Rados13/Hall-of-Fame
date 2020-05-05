@@ -19,7 +19,7 @@
         <button @click="addTerm" class="button">Add term</button>
 
 
-        <div v-bind:key="lecture.lecture_id" v-for="lecture in lectures">    
+        <div v-bind:key="lecture.lecture_id" v-for="lecture in group.lectures_list">    
             <GroupLecture v-bind:lecture = "lecture" @updateLecture = "updateLecture" @deleteLecture="deleteLecture" />
         </div>    
         <button @click="addLecture" class='button'>Add lecture</button>
@@ -28,23 +28,28 @@
         <button @click="showMarks=!showMarks" class="button">Show marks</button>
         <div v-if="showMarks">
             <div  v-bind:key="student.enrolled_id" v-for="student in group.enrolled_list">
-                <MarksList v-bind:student="students.filter(elem=> elem.pk==student.user_id)[0]" 
-                    v-bind:marksList="student.marks_list" @changeMark='changeMark' 
-                    @deleteMark='deleteMark' @addMark='addMark(student.marks_list)'
+                <MarksList v-bind:marksList="student.marks_list" 
+                v-bind:studentName="student.first_name+'  '+student.last_name" v-bind:studentID="student.user_id"
+                @changeMark='changeMark'  @deleteMark='deleteMark' @addMark='addMark(student.marks_list)'
                     ></MarksList>
             </div>
-            <!-- <button @click="addAllPersonMark" class="button">Add all student mark</button> -->
+        </div>
+        <button @click="addAllStudentMark=!addAllStudentMark" class="button">Add all student mark</button>
+        <div v-if="addAllStudentMark">
+                <AllMarks v-bind:studentList=group.enrolled_list
+                @addAllMark = 'addAllMark'
+                ></AllMarks>
         </div>
 
         <button @click="showInattendance=!showInattendance" class="button">Show inattendance</button>
         <div v-if="showInattendance">
             <div  v-bind:key="student.enrolled_id" v-for="student in group.enrolled_list">
-                <InattendanceList v-bind:student="students.filter(elem=> elem.pk==student.user_id)[0]" 
+                <InattendanceList v-bind:studentName="student.first_name+'  '+student.last_name" 
                     v-bind:inattendanceList="student.inattendances_list" @changeInattendance='changeInattendance' 
                     @deleteInattendance='deleteInattendance' @addInattendance='addInattendance(student.inattendances_list)'
                     ></InattendanceList>
             </div>
-            <!-- <button @click="addAllPersonMark" class="button">Check attendance</button> -->
+            <!-- <button @click="addAllStudentMark" class="button">Check attendance</button> -->
         </div>
         <div class="buttons">
         <button @click="deleteGroup()" class='button'>Delete course</button>    
@@ -60,6 +65,7 @@ import Entry from '../../services/Entry.js';
 import GroupDateTime from './GroupDateTime';
 import GroupLecture from './GroupLecture';
 import MarksList from './MarksList';
+import AllMarks from './AllMarks';
 import InattendanceList from './InattendanceList';
 export default {
     name: "GroupPanel",
@@ -67,30 +73,25 @@ export default {
         GroupDateTime,
         GroupLecture,
         MarksList,
-        InattendanceList
+        InattendanceList,
+        AllMarks
     },
     data(){
         return {
             group: Object,
-            lectures: null,
-            students: null,
             nameChange: true,
             showMarks: false,
-            showInattendance: false
+            showInattendance: false,
+            addAllStudentMark:false
         }
     },
     created(){
         GroupRUD.getGroup(this.$route.params.groupID).then(data => {
             this.group = data;
-            this.refreshNames();
         });
        
     },
     methods:{
-        refreshNames(){
-            GroupRUD.getGroupLecturesNames(this.group.lectures_list).then(data=> this.lectures=data);
-            GroupRUD.getGroupStudentsNames(this.group.enrolled_list).then(data=> this.students=data);
-        },
         updateGroup(){
             GroupRUD.updateGroup(this.group);
         },
@@ -98,6 +99,7 @@ export default {
             GroupRUD.deleteGroup(this.group.pk);
             await this.$router.push('/groups');
         },
+
         changeCourseName(){
             console.log(this.nameChange);
             this.nameChange = !this.nameChange;
@@ -105,20 +107,22 @@ export default {
         },
         addLecture(){
             this.group.lectures_list.push({lecture_id: null,main_lecture: false});
-            this.lectures.push({pk: null,first_name:"",last_name:""});
         },
         updateLecture(lecture,firstName,lastName){
             new Entry().getUser(firstName,lastName).then(data=>{
                 if( data!== null){
-                    this.group.lectures_list.filter(elem => elem.lecture_id===lecture.pk)[0].lecture_id = data[0].pk;
-                    this.refreshNames();
+                    var newLecture = this.group.lectures_list.filter(elem => elem.lecture_id===lecture.lecture_id)[0];
+                    newLecture.lecture_id=data[0].pk;
+                    newLecture.first_name = firstName;
+                    newLecture.last_name = lastName;
                 }
             }).catch(e=>console.log(e));
         },
         deleteLecture(lecture){
-            this.group.lectures_list = this.group.lectures_list.filter(elem => elem.lecture_id !== lecture.pk);
-            this.lectures = this.lectures.filter(elem => elem.pk !== lecture.pk);
+            this.group.lectures_list = this.group.lectures_list.filter(elem => elem.lecture_id !== lecture.lecture_id);
         },
+
+
         addTerm(){
             this.group.date_time.push({day_of_week: "",time: ""});
         },
@@ -132,6 +136,8 @@ export default {
         getEnrolled(id){
             return this.group.enrolled_list.filter(elem=> elem.user_id===id)[0];
         },
+
+
         changeMark(mark,value,description,note){
             mark.value = value;
             mark.for_what = description;
@@ -144,12 +150,16 @@ export default {
             if(marksList===null)marksList = [];
             marksList.push({value: null, for_what:null,note:null});
         },
+        addAllMark(marks,forWhat){
+            GroupRUD.addMarkAllStudent(this.group.pk,marks,forWhat);
+            this.addAllStudentMark = !this.addAllStudentMark;
+        },
+
         changeInattendance(inattendance,classNum,justified){
             inattendance.class_num = classNum;
             inattendance.justified = justified;
         },
         deleteInattendance(studentID,inattendance){
-            console.log(this.getEnrolled(studentID));
             this.getEnrolled(studentID).inattendances_list = 
             this.getEnrolled(studentID).inattendances_list.filter(elem => elem !== inattendance);
         },
@@ -157,7 +167,6 @@ export default {
             if(inattendanceList===null)inattendanceList = [];
             inattendanceList.push({class_num: null, justified:false});
         },
-        // addAllPersonMark(){    }
 
         
     }

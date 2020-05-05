@@ -15,15 +15,7 @@ export default {
     components:{
         InattendanceElem,
     },
-    props: ['student','inattendanceList'],
-    data(){
-        return {
-            studentName: "",
-        }
-    },
-    created(){
-        this.studentName = this.student.first_name+"  "+this.student.last_name;
-    },
+    props: ['studentName','inattendanceList'],
     methods:{
         changeInattendance(inattendance,classNum,justified){
             this.$emit('changeInattendance',inattendance,classNum,justified);

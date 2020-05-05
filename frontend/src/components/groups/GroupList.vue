@@ -25,7 +25,6 @@ export default {
     }
   },
   created(){
-    console.log(this.my);
     if(this.student){ GroupRUD.getStudentGroups().then(data=> this.groups = data);}
     else if(this.lecture){ GroupRUD.getLectureGroups().then(data=> this.groups =data);  }
     else{ GroupRUD.getGroups().then(data => this.groups = data); }

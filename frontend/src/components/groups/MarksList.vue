@@ -2,7 +2,7 @@
     <div class='item-list'>
         <p>{{this.studentName}} <button @click="addMark" class="button">Add mark</button></p>
         <div v-bind:key="mark.for_what" v-for="mark in marksList">
-           <MarkElem v-bind:mark="mark" @deleteMark="$emit('deleteMark',student.pk,mark)" @changeMark="changeMark"></MarkElem>
+           <MarkElem v-bind:mark="mark" @deleteMark="$emit('deleteMark',studentID,mark)" @changeMark="changeMark"></MarkElem>
         </div>
     </div>
 </template>
@@ -14,15 +14,7 @@ export default {
     components:{
         MarkElem,
     },
-    props: ['student','marksList'],
-    data(){
-        return {
-            studentName: "",
-        }
-    },
-    created(){
-        this.studentName = this.student.first_name+"  "+this.student.last_name;
-    },
+    props: ['studentName','marksList','studentID'],
     methods:{
         changeMark(mark,value,description,note){
             this.$emit('changeMark',mark,value,description,note);

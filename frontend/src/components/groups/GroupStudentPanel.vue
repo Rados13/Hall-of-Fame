@@ -5,17 +5,17 @@
             <p> Day: {{dateTime.day_of_week}}  time:  {{dateTime.time}} </p> 
         </div>  
 
-        <div v-bind:key="lecture.lecture_id" v-for="lecture in lectures">    
+        <div v-bind:key="lecture.lecture_id" v-for="lecture in group.lectures_list">    
            <p> Lecture: {{lecture.first_name}} {{lecture.last_name}} </p>
         </div>    
 
         <div v-bind:key="student.enrolled_id" v-for="student in group.enrolled_list">
-            <p>Marks </p>
+            <p>Marks: </p>
             <div v-bind:key="mark.for_what" v-for="mark in student.marks_list">
                 <p>Value: {{mark.value}}   for what {{mark.for_what}}   additional note {{mark.note}}</p>
             </div>
-            <p>Inattendances</p>
-            <div v-bind:key="inattendance" v-for="inattendance in student.inattendances_list">
+            <p>Inattendances: </p>
+            <div v-bind:key="inattendance.class_num" v-for="inattendance in student.inattendances_list">
                 <p>Class:  {{inattendance.class_num}}   
                     <input type="checkbox" name="Justified" value='inattendance.justified' readonly></p>
             </div>
@@ -34,22 +34,15 @@ export default {
     data(){
     return {
       group: Object,
-      lectures: null,
       nameChange: true
     }
   },
     created(){
         GroupRUD.getGroup(this.$route.params.groupID,false).then(data => {
             this.group = data;
-            this.refreshLectures();
         });
        
     },
-    methods:{
-        refreshLectures(){
-            return GroupRUD.getGroupLecturesNames(this.group.lectures_list).then(data=> this.lectures=data);
-        },        
-    }
 }
 </script>
 

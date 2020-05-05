@@ -111,6 +111,9 @@ class GroupSerializer(serializers.ModelSerializer):
         if 'date_time' in validated_data:
             instance.date_time = list(map(lambda elem: DayTime(**elem), validated_data['date_time']))
         if 'lectures_list' in validated_data:
+            for elem in validated_data['lectures_list']:
+                elem.pop('first_name',None)
+                elem.pop('last_name',None)
             instance.lectures_list = list(map(lambda elem: Lecture(**elem), validated_data['lectures_list']))
         if 'enrolled_list' in validated_data:
             instance.enrolled_list = list(map(lambda elem: self.create_enrolled_from_json(**elem),

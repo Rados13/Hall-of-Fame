@@ -6,7 +6,7 @@
         <div v-bind:key="dateTime.day_of_week" v-for="dateTime in group.date_time">    
             <p> Day: {{dateTime.day_of_week}} hour of start: {{dateTime.time}}</p>
         </div>    
-        <div v-bind:key="lecture.lecture_id" v-for="lecture in lectures">    
+        <div v-bind:key="lecture.lecture_id" v-for="lecture in group.lectures_list">    
             <p> Lecture: {{lecture.first_name}}  {{lecture.last_name}}</p>
         </div>    
         <div class="buttons">
@@ -28,9 +28,6 @@ export default {
     return {
         lectures: [],
       }
-    },
-    created(){
-        GroupRUD.getGroupLecturesNames(this.group.lectures_list).then(data=> this.lectures=data).catch(e=>console.log(e));
     },
     methods:{ 
       goToGroupPanel(id){
