@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const registerURL = 'http://127.0.0.1:8000/api/users/';
+const userInfoURL = 'http://127.0.0.1:8000/api/users/info';
 const tokenURL = 'http://127.0.0.1:8000/api/token';
 const refreshURL = 'http://127.0.0.1:8000/api/token/refresh';
 
@@ -30,19 +31,21 @@ export default class Entry {
         axios.post(tokenURL, {email: email, password: password}).then(response => {
             localStorage.setItem("accessToken", response.data.access);
             localStorage.setItem("refreshToken", response.data.refresh);
+            Entry.getUserInfo();
             this.$router.push('/students');
         }).catch(error => {
             console.log(error);
         });
     }
 
-    // static async refreshToken() {
-    //     axios.post(refreshURL, {refresh: localStorage.getItem("refreshToken")}).then(response => {
-    //         localStorage.setItem("accessToken", response.data.access);
-    //     }).catch(error => {
-    //         console.log(error);
-    //     });
-    // }
+    static async getUserInfo(){
+        await axios.get(userInfoURL,{
+            headers: {Authorization: `Bearer ${localStorage.getItem("accessToken")}`}}).then(data =>{
+                console.log(data);
+                localStorage.setItem("isLecture",data.is_lecture);
+                localStorage.setItem("isStudent",data.is_student);
+            }).catch(error => console.log(error));
+    }
 
     static async refreshToken() {
         console.log("refresh\n");
@@ -50,17 +53,6 @@ export default class Entry {
             localStorage.setItem("accessToken", response.data.access);
         });
     }
-
-    // static async refreshToken() {
-    //     try {
-    //         const response =  await axios.post(refreshURL, {refresh: localStorage.getItem("refreshToken")});
-    //         localStorage.setItem("accessToken", response.data.access);
-    //         return response;
-    //     }catch (error) {
-    //         console.error(error);
-    //         return error;
-    //     }
-    // }
 
     static invalidateAccessToken() {
         localStorage.setItem("accessToken", null);

@@ -1,12 +1,18 @@
 <template>
     <div id='app'>
-    <ul > <router-link to="/login">Login</router-link></ul>
-    <ul> <router-link to="/register">Register</router-link></ul>
-    <ul> <router-link to="/students">User data</router-link> </ul>
-    <ul> <router-link to="/addGroup">Create group</router-link> </ul>
-    <ul> <router-link to="/groups">Groups list</router-link> </ul>
-    <ul> <router-link to="/lecturegroups">My lecture groups</router-link> </ul>
-    <ul> <router-link to="/studentgroups">My student groups</router-link> </ul>
+        <!-- <div v-if="localStorage.getItem('refreshToken')===null">     -->
+            <ul> <router-link to="/login">Login</router-link></ul>
+            <ul> <router-link to="/register">Register</router-link></ul>
+        <!-- </div> -->
+        <!-- <div v-if="localStorage.getItem('isStudent')===true"> -->
+            <ul> <router-link to="/groups">Groups list</router-link> </ul>
+            <ul> <router-link to="/studentgroups">My student groups</router-link> </ul>
+        <!-- </div> -->
+        <!-- <div v-if="localStorage.getItem('isLecture')===true"> -->
+            <ul> <router-link to="/students">User data</router-link> </ul>
+            <ul> <router-link to="/addGroup">Create group</router-link> </ul>
+            <ul> <router-link to="/lecturegroups">My lecture groups</router-link> </ul>
+        <!-- </div> -->
     </div>
 </template>
 
@@ -15,7 +21,12 @@
 
 export default {
     name: 'NavbarApp',
-    components:{
+    data(){
+        return {
+            isLecture: false,
+            isAdmin: false,
+            isLogin: false
+        }
     }
 }
 </script>

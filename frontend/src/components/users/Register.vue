@@ -1,7 +1,7 @@
 <template>
     <div id="app">
         <p>{{text}}</p>
-        <h1>Login</h1>
+        <h1>Register</h1>
         <form action='#' @submit.prevent='register'>
             <p><input type='text' placeholder="email" v-model='email'></p>
             <p><input type='text' placeholder="First name" v-model='first_name'></p>

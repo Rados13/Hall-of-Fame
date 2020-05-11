@@ -29,6 +29,8 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
         extra_fields.setdefault('is_active', True)
+        extra_fields.setdefault('is_lecture', True)
+        extra_fields.setdefault('is_student', True)
 
         if extra_fields.get('is_staff') is not True:
             raise ValueError(_('Superuser must have is_staff=True.'))
@@ -47,6 +49,8 @@ class User(AbstractUser):
         max_length=255,
         unique=True,
     )
+    is_lecture = models.BooleanField(default=False)
+    is_student = models.BooleanField(default=True)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
     objects = UserManager()

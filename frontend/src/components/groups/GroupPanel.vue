@@ -9,7 +9,7 @@
         </div>
         <div v-else>
             <form action='#' @submit.prevent = 'changeCourseName()'>
-                <p><input type='text' v-bind=group.course v-model='group.course'><input type='submit' value='Submit' ></p>
+                <p><input type='text' v-bind:course=group.course v-model='group.course'><input type='submit' value='Submit' ></p>
             </form>
         </div>
 
@@ -157,8 +157,8 @@ export default {
             if(marksList===null)marksList = [];
             marksList.push({value: null, for_what:null,note:null});
         },
-        addAllMark(marks,forWhat){
-            GroupRUD.addMarkAllStudent(this.group.pk,marks,forWhat);
+        addAllMark(marks,forWhat,maxPoints){
+            GroupRUD.addMarkAllStudent(this.group.pk,marks,forWhat,maxPoints);
             this.addAllStudentMark = !this.addAllStudentMark;
         },
 

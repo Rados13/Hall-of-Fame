@@ -42,11 +42,13 @@ export default {
         GroupRUD.getGroup(this.$route.params.groupID,false).then(data => {
             this.group = data;
             var sum = 0;
+            console.log(this.group);
+            if(this.group.enrolled_list.length===0)return;
             var student = this.group.enrolled_list[0];
             for(var elem of student.marks_list){
                 sum+=elem.value;
             }
-            this.avg = sum/student.marks_list.length;
+            this.avg = student.marks_list.length>0?sum/student.marks_list.length:0.0;
         });
         
        

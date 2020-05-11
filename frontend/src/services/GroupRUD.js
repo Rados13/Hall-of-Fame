@@ -60,10 +60,10 @@ export default class {
       }).catch(e=> console.error(e));
     }
 
-    static async addMarkAllStudent(id,marks,markName){
+    static async addMarkAllStudent(id,marks,markName,maxPoints){
       await axios.post(baseURL+id+"/markAll/",{
         headers: {Authorization: `Bearer ${localStorage.getItem("accessToken")}`},
-        student_marks: marks, mark_name: markName
+        student_marks: marks, mark_name: markName, max_points: maxPoints
       }).catch(e => console.log(e));
     }
 

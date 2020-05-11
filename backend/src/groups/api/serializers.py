@@ -1,6 +1,5 @@
 from rest_framework import serializers
-
-# from ..models import CustomUser
+from users.models import User
 from groups.models import *
 
 
@@ -8,7 +7,7 @@ class LectureSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lecture
         fields = [
-            'lecture_id',
+            'lecture',
             'main_lecture',
         ]
 
@@ -40,11 +39,13 @@ class MarkSerializer(serializers.ModelSerializer):
         model = Mark
         fields = [
             'value',
+            'max_points',
             'for_what',
             'note'
         ]
         extra_kwargs = {
             'value': {'required': False, 'allow_null': True},
+            'max_points': {'required': False, 'allow_null': True},
             'for_what': {'required': False, 'allow_null': True},
             'note': {'required': False, 'allow_null': True},
         }
@@ -57,12 +58,14 @@ class EnrolledSerializer(serializers.ModelSerializer):
     class Meta:
         model = Enrolled
         fields = [
-            'user_id',
+            'student',
+            'final_grade',
             'inattendances_list',
             'marks_list'
         ]
         extra_kwargs = {
-            'user_id': {'required': True, 'allow_null': False},
+            'student': {'required': True, 'allow_null': False},
+            'final_grade': {'required': False, 'allow_null': True},
             'inattendances_list': {'required': False, 'allow_null': True},
             'marks_list': {'required': False, 'allow_null': True},
         }
@@ -83,11 +86,13 @@ class GroupSerializer(serializers.ModelSerializer):
             'date_time',
             'lectures_list',
             'enrolled_list',
+            'course_end'
         ]
         extra_kwargs = {
             'date_time': {'required': False, 'allow_null': True},
             'lectures_list': {'required': False, 'allow_null': True},
             'enrolled_list': {'required': False, 'allow_null': True},
+            'course_end': {'required': False, 'default': False}
         }
 
     def create(self, validated_data):
@@ -106,24 +111,28 @@ class GroupSerializer(serializers.ModelSerializer):
         return user_obj
 
     def update(self, instance, validated_data):
+        print(validated_data)
         if 'course' in validated_data:
             instance.course = validated_data['course']
         if 'date_time' in validated_data:
             instance.date_time = list(map(lambda elem: DayTime(**elem), validated_data['date_time']))
         if 'lectures_list' in validated_data:
             for elem in validated_data['lectures_list']:
-                elem.pop('first_name',None)
-                elem.pop('last_name',None)
-            instance.lectures_list = list(map(lambda elem: Lecture(**elem), validated_data['lectures_list']))
+                elem.pop('first_name', None)
+                elem.pop('last_name', None)
+            instance.lectures_list = list(map(
+                lambda elem: Lecture(lecture=User.objects.get(pk=elem['id']), **elem),
+                validated_data['lectures_list']))
         if 'enrolled_list' in validated_data:
             instance.enrolled_list = list(map(lambda elem: self.create_enrolled_from_json(**elem),
                                               validated_data['enrolled_list']))
         return instance
 
+
     def create_enrolled_from_json(self, *args, **kwargs):
-        print(kwargs)
+        user = User.objects.filter(pk=kwargs.get('student'))[0]
         return Enrolled(
-            user_id=kwargs.get('user_id'),
+            student=user,
             inattendances_list=list(map(lambda elem: Inattendence(**elem), kwargs.get('inattendances_list'))),
             marks_list=list(map(lambda elem: Mark(**elem), kwargs.get('marks_list')))
         )
