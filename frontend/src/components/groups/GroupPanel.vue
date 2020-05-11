@@ -12,7 +12,9 @@
                 <p><input type='text' v-bind:course=group.course v-model='group.course'><input type='submit' value='Submit' ></p>
             </form>
         </div>
-
+        <p>Course end: <input type='checkbox' v-bind:active=group.course_end v-model='group.course_end' />  
+            <input class='button' type="submit" @click="calculateAllFinalGrade" value="Calculate final grade for all students"/>
+        </p>
         <div v-bind:key="dateTime.day_of_week" v-for="dateTime in group.date_time">    
             <GroupDateTime v-bind:dateTime = "dateTime" @updateDateTime="updateTerm" @deleteTerm="deleteTerm"/>
         </div>  
@@ -28,7 +30,7 @@
         <button @click="showMarks=!showMarks" class="button">Show marks</button>
         <div v-if="showMarks">
             <div  v-bind:key="student.enrolled_id" v-for="student in group.enrolled_list">
-                <MarksList v-bind:marksList="student.marks_list" 
+                <MarksList v-bind:marksList="student.marks_list" v-bind:finalGrade="student.final_grade"
                 v-bind:studentName="student.first_name+'  '+student.last_name" v-bind:studentID="student.user_id"
                 @changeMark='changeMark'  @deleteMark='deleteMark' @addMark='addMark(student.marks_list)'
                     ></MarksList>
@@ -145,17 +147,18 @@ export default {
         },
 
 
-        changeMark(mark,value,description,note){
+        changeMark(mark,value,description,note,maxPoints){
             mark.value = value;
             mark.for_what = description;
             mark.note = note;
+            mark.max_points = maxPoints;
         },
         deleteMark(studentID,mark){
             this.getEnrolled(studentID).marks_list = this.getEnrolled(studentID).marks_list.filter(elem => elem !== mark);
         },
         addMark(marksList){
             if(marksList===null)marksList = [];
-            marksList.push({value: null, for_what:null,note:null});
+            marksList.push({value: null, for_what:null,note:null,max_points: 0});
         },
         addAllMark(marks,forWhat,maxPoints){
             GroupRUD.addMarkAllStudent(this.group.pk,marks,forWhat,maxPoints);
@@ -181,6 +184,10 @@ export default {
                 this.showGroupStats = 'Hide stats'; 
                 GroupRUD.getStats(this.group.pk).then(data=> this.groupStatsDictionary = data);
             }
+        },
+        calculateAllFinalGrade(){
+            GroupRUD.calculateAllFinalGrade(this.group.pk);
+            this.$router.go(this.$router.currentRoute)
         }
         
     }

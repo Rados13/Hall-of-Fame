@@ -36,9 +36,9 @@ class Mark(models.Model):
     # class Meta:
     #     abstract = True
 
-    def clean(self):
-        if self.value > self.max_points:
-            raise ValidationError("Student can't get more points than maximal number")
+    # def clean(self):
+    #     if self.value > self.max_points:
+    #         raise ValidationError("Student can't get more points than maximal number")
 
 
 class MarkForm(forms.ModelForm):

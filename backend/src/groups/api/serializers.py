@@ -126,8 +126,9 @@ class GroupSerializer(serializers.ModelSerializer):
         if 'enrolled_list' in validated_data:
             instance.enrolled_list = list(map(lambda elem: self.create_enrolled_from_json(**elem),
                                               validated_data['enrolled_list']))
+        if 'course_end' in validated_data:
+            instance.course_end = validated_data['course_end']
         return instance
-
 
     def create_enrolled_from_json(self, *args, **kwargs):
         user = User.objects.filter(pk=kwargs.get('student'))[0]

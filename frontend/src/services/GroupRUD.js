@@ -56,7 +56,7 @@ export default class {
       await axios.patch(baseURL+group.pk+'/',{
         headers: {Authorization: `Bearer ${localStorage.getItem("accessToken")}`},
         group: {course: group.course, date_time: group.date_time, 
-        lectures_list: group.lectures_list, enrolled_list: group.enrolled_list}
+        lectures_list: group.lectures_list, enrolled_list: group.enrolled_list, course_end: group.course_end}
       }).catch(e=> console.error(e));
     }
 
@@ -72,5 +72,9 @@ export default class {
         headers: {Authorization: `Bearer ${localStorage.getItem("accessToken")}`},
         params: {groups_id: [groupID,] },
       }).then(response=> {return response.data;}).catch(e => console.log(e));
+    }
+    static async calculateAllFinalGrade(groupID){
+      await axios.post(baseURL+groupID+'/finalGrade/',{
+        headers: {Authorization: `Bearer ${localStorage.getItem("accessToken")}`},});
     }
 }

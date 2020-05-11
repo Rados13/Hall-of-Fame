@@ -186,3 +186,22 @@ class StatsAPIView(generics.ListAPIView):
         result['total'] = avg_points_all_students(students)
 
         return Response(result, status=status.HTTP_200_OK)
+
+
+class FinalGradeAPIView(generics.RetrieveUpdateDestroyAPIView):
+    lookup_field = 'pk'
+    serializer_class = GroupSerializer
+    permission_classes = [IsLecture, PostMethod]
+
+    def get_queryset(self):
+        return Group.objects.all()
+
+    def post(self, request, *args, **kwargs):
+        obj = self.get_object()
+        obj.enrolled_list = final_grade_for_all_students(obj.enrolled_list)
+        serializer = self.get_serializer(data=self.get_serializer(obj).data)
+        if serializer.is_valid():
+            obj.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        print(serializer.errors)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
