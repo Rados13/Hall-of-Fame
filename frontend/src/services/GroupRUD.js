@@ -2,6 +2,7 @@
 
 import axios from 'axios';
 const baseURL = 'http://127.0.0.1:8000/api/groups/';
+const statsURL = 'http://127.0.0.1:8000/api/groups/stats/';
 const lectureURL = 'http://127.0.0.1:8000/api/groups/';
 const studentURL = 'http://127.0.0.1:8000/api/groups/';
 
@@ -60,11 +61,16 @@ export default class {
     }
 
     static async addMarkAllStudent(id,marks,markName){
-      console.log(marks);
       await axios.post(baseURL+id+"/markAll/",{
         headers: {Authorization: `Bearer ${localStorage.getItem("accessToken")}`},
         student_marks: marks, mark_name: markName
       }).catch(e => console.log(e));
-      console.log("End");
+    }
+
+    static async getStats(groupID){
+      return await axios.get(statsURL,{
+        headers: {Authorization: `Bearer ${localStorage.getItem("accessToken")}`},
+        params: {groups_id: [groupID,] },
+      }).then(response=> {return response.data;}).catch(e => console.log(e));
     }
 }

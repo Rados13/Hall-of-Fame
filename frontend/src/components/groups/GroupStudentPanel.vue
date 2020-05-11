@@ -14,6 +14,7 @@
             <div v-bind:key="mark.for_what" v-for="mark in student.marks_list">
                 <p>Value: {{mark.value}}   for what {{mark.for_what}}   additional note {{mark.note}}</p>
             </div>
+            <p>Average: {{avg}}</p>
             <p>Inattendances: </p>
             <div v-bind:key="inattendance.class_num" v-for="inattendance in student.inattendances_list">
                 <p>Class:  {{inattendance.class_num}}   
@@ -34,13 +35,20 @@ export default {
     data(){
     return {
       group: Object,
-      nameChange: true
+      avg: 0.0
     }
   },
     created(){
         GroupRUD.getGroup(this.$route.params.groupID,false).then(data => {
             this.group = data;
+            var sum = 0;
+            var student = this.group.enrolled_list[0];
+            for(var elem of student.marks_list){
+                sum+=elem.value;
+            }
+            this.avg = sum/student.marks_list.length;
         });
+        
        
     },
 }

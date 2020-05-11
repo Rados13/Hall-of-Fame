@@ -49,7 +49,10 @@
                     @deleteInattendance='deleteInattendance' @addInattendance='addInattendance(student.inattendances_list)'
                     ></InattendanceList>
             </div>
-            <!-- <button @click="addAllStudentMark" class="button">Check attendance</button> -->
+        </div>
+        <button @click="getStats()" class="button">{{showGroupStats}}</button>
+        <div v-if="showGroupStats==='Hide stats'">
+            <GroupStats v-bind:stats="groupStatsDictionary"></GroupStats>
         </div>
         <div class="buttons">
         <button @click="deleteGroup()" class='button'>Delete course</button>    
@@ -67,6 +70,7 @@ import GroupLecture from './GroupLecture';
 import MarksList from './MarksList';
 import AllMarks from './AllMarks';
 import InattendanceList from './InattendanceList';
+import GroupStats from './GroupStats';
 export default {
     name: "GroupPanel",
     components:{
@@ -74,7 +78,8 @@ export default {
         GroupLecture,
         MarksList,
         InattendanceList,
-        AllMarks
+        AllMarks,
+        GroupStats
     },
     data(){
         return {
@@ -82,7 +87,9 @@ export default {
             nameChange: true,
             showMarks: false,
             showInattendance: false,
-            addAllStudentMark:false
+            addAllStudentMark:false,
+            showGroupStats: "Show stats",
+            groupStatsDictionary: null
         }
     },
     created(){
@@ -168,6 +175,13 @@ export default {
             inattendanceList.push({class_num: null, justified:false});
         },
 
+        getStats(){
+            if(this.showGroupStats === 'Hide stats')this.showGroupStats='Show stats';
+            else {
+                this.showGroupStats = 'Hide stats'; 
+                GroupRUD.getStats(this.group.pk).then(data=> this.groupStatsDictionary = data);
+            }
+        }
         
     }
 }

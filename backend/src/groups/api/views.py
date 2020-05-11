@@ -1,12 +1,14 @@
+from groups.queries import Querying
 from rest_framework import generics, mixins, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .serializers import GroupSerializer
 from djongo.models import Q
-from .permissions import IsLecture, IsStudent, ReadOnly, get_id_from_token, PostMethod
+from .permissions import IsLecture, IsStudent, ReadOnly, get_id_from_token, PostMethod, get_request_data
 from groups.models import Group, Enrolled, Mark
 from users.models import User
-
+from ..stats import *
+# import json
 
 def find_user_and_add_user_name(user, param_name):
     user_names = list(User.objects.filter(pk=user[param_name]))[0]
@@ -50,6 +52,32 @@ class GroupAPIView(mixins.CreateModelMixin, generics.ListAPIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         print(serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class StatsAPIView(generics.ListAPIView):
+    lookup_field = 'pk'
+    serializer_class = GroupSerializer
+    permission_classes = [ReadOnly, IsLecture]
+
+    def get(self, request, *args, **kwargs):
+        groups_id = request.GET.getlist('groups_id[]')
+        groups_id = list(map(lambda elem: int(elem), groups_id))
+
+        obj = Querying(Group.objects,groups_id)
+        marks = obj.filter_group_list()
+
+        marks_names = obj.get_for_what_list()
+        result = avg_points_for_what(marks,list(marks_names))
+
+        students = obj.get_student_list()
+        result['total']=avg_points_all_students(students)
+
+        # groups = list(chain.from_iterable(groups))
+        # print(groups)
+        # print(len(groups))
+
+        return Response(result , status=status.HTTP_200_OK)
+        # return Response("Hell yead" , status=status.HTTP_200_OK)
 
 
 class GroupRUDView(generics.RetrieveUpdateDestroyAPIView):
@@ -150,7 +178,3 @@ class MarkAllPostView(generics.RetrieveUpdateDestroyAPIView):
     def append_mark_to_student(self, student, marks, mark_name):
         student.marks_list.append(Mark(for_what=mark_name, **marks[str(student.user_id)]))
         return student
-
-    # def update(self, request, *args, **kwargs):
-    #
-    # def get(self, request, *args, **kwargs):

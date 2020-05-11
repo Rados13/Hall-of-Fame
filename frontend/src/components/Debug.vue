@@ -1,7 +1,7 @@
 <template>
     <div id='app'>
     <ul> <p v-on:click="invalidateAccessToken">invalidate</p> </ul>
-    <ul> <p v-on:click="refreshToken">refresh</p> </ul>
+    <ul> <a v-on:click="refreshToken">refresh</a> </ul>
     </div>
 </template>
 
