@@ -2,7 +2,7 @@
     <form action='#' @submit.prevent = "$emit('addAllMark',grades,forWhat,maxPoints)">
     Name of mark: <input type='text' v-bind:description=forWhat v-model='forWhat'>
     Max points: <input type='number' v-bind:description=maxPoints v-model='maxPoints'>
-    <div class='item-list' v-bind:key="student.user_id" v-for="student in studentList">
+    <div class='item-list' v-bind:key="student.user" v-for="student in studentList">
         <p>
             {{student.first_name}}  {{student.last_name}} 
             Value: <input type='number' v-bind:key=grades[student.student][value] v-model='grades[student.student][value]'>

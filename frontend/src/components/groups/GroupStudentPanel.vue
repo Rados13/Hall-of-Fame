@@ -21,8 +21,10 @@
                     <input type="checkbox" name="Justified" value='inattendance.justified' readonly></p>
             </div>
         </div>
-
-        
+        <button class="button" @click="createMail">{{mailButtonText}}</button>
+        <div v-if="sendMail">
+            <MailForm v-bind:usersList="group.lectures_list" @sended='createMail'></MailForm>
+        </div>
 
     </div>
 </template>
@@ -30,12 +32,18 @@
 <script>
 
 import GroupRUD from '../../services/GroupRUD.js';
+import MailForm from './MailForm';
 export default {
     name: "GroupStudentPanel",
+    components:{
+        MailForm
+    },
     data(){
     return {
       group: Object,
-      avg: 0.0
+      avg: 0.0,
+      sendMail: false,
+      mailButtonText: "Create mail to lecture",
     }
   },
     created(){
@@ -50,9 +58,14 @@ export default {
             }
             this.avg = student.marks_list.length>0?sum/student.marks_list.length:0.0;
         });
-        
-       
     },
+    methods:{
+        createMail(){
+            console.log("Happen");
+            this.mailButtonText = this.sendMail?"Create mail to lecture" :"Discard mail"; 
+            this.sendMail = !this.sendMail;
+        }
+    }
 }
 </script>
 

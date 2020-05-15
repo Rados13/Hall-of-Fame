@@ -56,6 +56,12 @@
         <div v-if="showGroupStats==='Hide stats'">
             <GroupStats v-bind:stats="groupStatsDictionary"></GroupStats>
         </div>
+        <button class="button" @click="createMail">{{mailButtonText}}</button>
+        <div v-if="sendMail">
+            <MailForm v-bind:usersList="group.enrolled_list" 
+            @sended='createMail'
+            ></MailForm>
+        </div>
         <div class="buttons">
         <button @click="deleteGroup()" class='button'>Delete course</button>    
         <button @click="updateGroup()" class='button'>Save changes</button>
@@ -73,6 +79,7 @@ import MarksList from './MarksList';
 import AllMarks from './AllMarks';
 import InattendanceList from './InattendanceList';
 import GroupStats from './GroupStats';
+import MailForm from './MailForm';
 export default {
     name: "GroupPanel",
     components:{
@@ -81,7 +88,9 @@ export default {
         MarksList,
         InattendanceList,
         AllMarks,
-        GroupStats
+        GroupStats,
+        MailForm
+        
     },
     data(){
         return {
@@ -91,7 +100,9 @@ export default {
             showInattendance: false,
             addAllStudentMark:false,
             showGroupStats: "Show stats",
-            groupStatsDictionary: null
+            groupStatsDictionary: null,
+            mailButtonText: "Create mail to students",
+            sendMail: false,
         }
     },
     created(){
@@ -110,9 +121,7 @@ export default {
         },
 
         changeCourseName(){
-            console.log(this.nameChange);
             this.nameChange = !this.nameChange;
-            console.log(this.nameChange);
         },
         addLecture(){
             this.group.lectures_list.push({lecture_id: null,main_lecture: false});
@@ -188,6 +197,11 @@ export default {
         calculateAllFinalGrade(){
             GroupRUD.calculateAllFinalGrade(this.group.pk);
             this.$router.go(this.$router.currentRoute)
+        },
+
+        createMail(){
+            this.mailButtonText = this.sendMail?"Create mail to students" :"Discard mail"; 
+            this.sendMail = !this.sendMail;
         }
         
     }

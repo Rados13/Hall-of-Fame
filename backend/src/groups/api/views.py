@@ -6,7 +6,6 @@ from .serializers import GroupSerializer
 from djongo.models import Q
 from .permissions import *
 from groups.models import Group, Enrolled, Mark
-from users.models import User
 from ..stats import *
 
 
@@ -77,6 +76,7 @@ class GroupRUDView(generics.RetrieveUpdateDestroyAPIView):
             elem_names = list(filter(lambda x: x['id'] == elem['student'], students_names))[0]
             elem['first_name'] = elem_names['first_name']
             elem['last_name'] = elem_names['last_name']
+            elem['id'] = elem_names['id']
 
         if IsLecture().has_object_permission(request, self, obj):
             return Response(elem_serialized, status=status.HTTP_200_OK)
