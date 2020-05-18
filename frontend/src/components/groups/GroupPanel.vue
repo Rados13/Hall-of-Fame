@@ -31,7 +31,7 @@
         <div v-if="showMarks">
             <div  v-bind:key="student.enrolled_id" v-for="student in group.enrolled_list">
                 <MarksList v-bind:marksList="student.marks_list" v-bind:finalGrade="student.final_grade"
-                v-bind:studentName="student.first_name+'  '+student.last_name" v-bind:studentID="student.user_id"
+                v-bind:studentName="student.first_name+'  '+student.last_name" v-bind:studentID="student.id"
                 @changeMark='changeMark'  @deleteMark='deleteMark' @addMark='addMark(student.marks_list)'
                     ></MarksList>
             </div>
@@ -108,8 +108,7 @@ export default {
     created(){
         GroupRUD.getGroup(this.$route.params.groupID).then(data => {
             this.group = data;
-        });
-       
+        });   
     },
     methods:{
         updateGroup(){
@@ -152,7 +151,7 @@ export default {
             dateTime.time = time;
         },
         getEnrolled(id){
-            return this.group.enrolled_list.filter(elem=> elem.user_id===id)[0];
+            return this.group.enrolled_list.filter(elem=> elem.id===id)[0];
         },
 
 
@@ -163,6 +162,10 @@ export default {
             mark.max_points = maxPoints;
         },
         deleteMark(studentID,mark){
+            console.log(studentID);
+            console.log(mark);
+            console.log(this.getEnrolled(studentID).marks_list);
+            console.log(this.getEnrolled(studentID).marks_list.filter(elem => elem !== mark));
             this.getEnrolled(studentID).marks_list = this.getEnrolled(studentID).marks_list.filter(elem => elem !== mark);
         },
         addMark(marksList){
@@ -172,6 +175,7 @@ export default {
         addAllMark(marks,forWhat,maxPoints){
             GroupRUD.addMarkAllStudent(this.group.pk,marks,forWhat,maxPoints);
             this.addAllStudentMark = !this.addAllStudentMark;
+            this.$router.go(this.$router.currentRoute)
         },
 
         changeInattendance(inattendance,classNum,justified){

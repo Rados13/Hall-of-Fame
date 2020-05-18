@@ -28,8 +28,8 @@ class Querying:
             {'$group': {'_id': '$students.user_id', 'data': {'$addToSet': '$students.marks_list'}}}
         ])
         students = [elem['data'] for elem in students]
-        students =  list(chain.from_iterable(students))
-        return  list(chain.from_iterable(students))
+        students = list(chain.from_iterable(students))
+        return list(chain.from_iterable(students))
 
     def get_for_what_list(self):
         names = self.groups_objects.mongo_aggregate([{'$match': {'id': {'$in': self.groups_id}}},

@@ -2,7 +2,7 @@
     <div>
         <div class='item-list' v-for="(item,key) in stats" :key="key">
             <p>
-                {{key}}: {{item}}
+                {{key}}: {{item.val}}/{{item.max_points}}
             </p>
         </div>
     </div>
