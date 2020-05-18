@@ -1,6 +1,10 @@
+import matplotlib.pyplot as plt
+from HallOfFame.settings import MEDIA_ROOT, os, MEDIA_URL
+import socket
+
+
 def avg_points_for_what(data, mark_names):
     result = {}
-    max_points = 0
     for name in mark_names:
         sum = 0
         students_num = 0
@@ -10,7 +14,6 @@ def avg_points_for_what(data, mark_names):
                 students_num += 1
                 if 'max_points' in elem and str(name) not in result:
                     result[str(name)] = {'max_points': elem['max_points']}
-                    print(result)
         result[str(name)]['val'] = (sum / students_num) if students_num != 0 else 0.0
 
     return result
@@ -46,3 +49,20 @@ def final_grade_for_all_students(enrolled_list):
     return enrolled_list
 
 
+def plot_data(plot_name, data, host):
+    print(data)
+    fig = plt.figure()
+    ax = fig.add_axes([0, 0, 1, 1])
+    whats = list(data.keys())
+    values = [elem['val'] for elem in data.values()]
+    max_points = [elem['max_points'] for elem in data.values()]
+    diffrences = [max_points[i] - values[i] for i in range(len(values))]
+    print(whats, "   ", values, "   ", max_points)
+    ax.bar(whats, values, color='b')
+    ax.bar(whats, diffrences, bottom=values, color='r')
+    ax.set_title("Stat per group")
+    plot_name += '.png'
+    path = os.path.join(MEDIA_ROOT, plot_name)
+    plt.savefig(path)
+    url = os.path.join(MEDIA_URL, plot_name)
+    return host + url

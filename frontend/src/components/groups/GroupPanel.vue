@@ -54,7 +54,9 @@
         </div>
         <button @click="getStats()" class="button">{{showGroupStats}}</button>
         <div v-if="showGroupStats==='Hide stats'">
-            <GroupStats v-bind:stats="groupStatsDictionary"></GroupStats>
+            <GroupStats v-bind:stats="groupStatsDictionary"
+                        v-bind:link="statsLink"
+            ></GroupStats>
         </div>
         <button class="button" @click="createMail">{{mailButtonText}}</button>
         <div v-if="sendMail">
@@ -103,6 +105,7 @@ export default {
             groupStatsDictionary: null,
             mailButtonText: "Create mail to students",
             sendMail: false,
+            statsLink:""
         }
     },
     created(){
@@ -195,7 +198,11 @@ export default {
             if(this.showGroupStats === 'Hide stats')this.showGroupStats='Show stats';
             else {
                 this.showGroupStats = 'Hide stats'; 
-                GroupRUD.getStats(this.group.pk).then(data=> this.groupStatsDictionary = data);
+                GroupRUD.getStats(this.group.pk).then(data=>{
+                    this.groupStatsDictionary = data;
+                    this.statsLink=this.groupStatsDictionary.link;
+                    delete this.groupStatsDictionary['link'];
+                });
             }
         },
         calculateAllFinalGrade(){

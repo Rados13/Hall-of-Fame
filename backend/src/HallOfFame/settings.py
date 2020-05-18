@@ -74,7 +74,8 @@ ROOT_URLCONF = 'HallOfFame.urls'
 
 TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 FRONTEND_DIR = os.path.join(BASE_DIR, 'frontend')
-
+MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+MEDIA_URL = "/images/"
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',

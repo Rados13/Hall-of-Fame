@@ -185,6 +185,8 @@ class StatsAPIView(generics.ListAPIView):
         students = obj.get_student_list()
         result['total'] = avg_points_all_students(students)
 
+        result['link'] = plot_data(str(groups_id)+"stats", result, request.get_host())
+
         return Response(result, status=status.HTTP_200_OK)
 
 

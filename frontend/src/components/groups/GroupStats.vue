@@ -5,13 +5,14 @@
                 {{key}}: {{item.val}}/{{item.max_points}}
             </p>
         </div>
+        <p><img v-bind:src='"http://"+link' alt="stats plot" ></p>
     </div>
 </template>
 <script>
 
 export default {
     name: "GroupStats",
-    props: ['stats'],
+    props: ['stats','link'],
 }
 </script>
 

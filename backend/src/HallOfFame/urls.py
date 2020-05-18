@@ -16,7 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-
+from django.conf import settings
+from django.conf.urls.static import static
 urlpatterns = [
     path('api/users/', include('users.api.urls', namespace='api-users', )),
     path('api/groups/', include('groups.api.urls', namespace='api-groups', )),
@@ -24,4 +25,4 @@ urlpatterns = [
     path('api/token', TokenObtainPairView.as_view(), name='api-login'),
     path('api/token/refresh', TokenRefreshView.as_view(), name='api-login'),
     path('admin/', admin.site.urls),
-]
+]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
