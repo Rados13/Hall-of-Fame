@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 from HallOfFame.settings import MEDIA_ROOT, os, MEDIA_URL
-import socket
+import numpy as np
 
 
 def avg_points_for_what(data, mark_names):
@@ -50,17 +50,23 @@ def final_grade_for_all_students(enrolled_list):
 
 
 def plot_data(plot_name, data, host):
-    print(data)
-    fig = plt.figure()
-    ax = fig.add_axes([0, 0, 1, 1])
+    fig, ax = plt.subplots()
+
     whats = list(data.keys())
     values = [elem['val'] for elem in data.values()]
     max_points = [elem['max_points'] for elem in data.values()]
     diffrences = [max_points[i] - values[i] for i in range(len(values))]
-    print(whats, "   ", values, "   ", max_points)
-    ax.bar(whats, values, color='b')
-    ax.bar(whats, diffrences, bottom=values, color='r')
-    ax.set_title("Stat per group")
+    ind = np.arange(len(values))
+
+    ax.bar(ind, values, color='b', label='Average', tick_label=whats)
+    ax.bar(ind, diffrences, bottom=values, color='r', label='Max', tick_label=whats)
+
+    ax.set_ylabel('Points')
+    ax.set_title("Average per exercise")
+    ax.legend()
+    ax.set_xticks(ind)
+    ax.set_xticklabels(whats)
+
     plot_name += '.png'
     path = os.path.join(MEDIA_ROOT, plot_name)
     plt.savefig(path)
