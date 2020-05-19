@@ -15,6 +15,7 @@ backend/__init__
 backend/pip-selfcheck.json
 backend/pyvenv.cfg
 backend/src/media/*
+!backend/src/media/.gitkeep 
 
 # User-specific stuff
 .idea/**/workspace.xml
