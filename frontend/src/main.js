@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import App from './App.vue'
+import {store} from './store'
 import Login from './components/users/Login.vue'
 import StudentList from './components/users/StudentList.vue'
 import Register from './components/users/Register.vue'
@@ -31,6 +32,7 @@ const router = new VueRouter({
 
 new Vue({
     el: '#app',
+    store,
     router,
     render: h => h(App),
 }).$mount('#app')

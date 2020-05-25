@@ -7,6 +7,7 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.response import Response
 from groups.api.permissions import get_id_from_token
 
+
 class UserAPIView(mixins.CreateModelMixin, generics.ListAPIView):
     lookup_field = 'pk'
     serializer_class = CustomUserSerializer
@@ -58,5 +59,5 @@ class UserInfo(generics.RetrieveAPIView):
 
     def get(self, request, *args, **kwargs):
         obj = list(User.objects.filter(pk=get_id_from_token(request)))[0]
-        info = {'is_lecture': obj.is_lecture, 'is_student': obj.is_student}
+        info = {'is_lecture': obj.is_lecture, 'is_student': obj.is_student, 'is_admin': obj.is_superuser}
         return Response(info, status=status.HTTP_200_OK)

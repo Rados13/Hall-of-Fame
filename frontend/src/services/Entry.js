@@ -13,7 +13,7 @@ export default class Entry {
         this.$router = router;
     }
 
-    register(email, first_name, last_name, password) {
+    async register(email, first_name, last_name, password) {
         axios.post(registerURL, {
             email: email, first_name: first_name,
             last_name: last_name, password: password
@@ -25,13 +25,10 @@ export default class Entry {
         });
     }
 
-    login(email, password) {
-        localStorage.setItem("email", email);
-        localStorage.setItem("password", password);
-        axios.post(tokenURL, {email: email, password: password}).then(response => {
+    async login(email, password) {
+        await axios.post(tokenURL, {email: email, password: password}).then(response => {
             localStorage.setItem("accessToken", response.data.access);
             localStorage.setItem("refreshToken", response.data.refresh);
-            Entry.getUserInfo();
             this.$router.push('/students');
         }).catch(error => {
             console.log(error);
@@ -39,16 +36,13 @@ export default class Entry {
     }
 
     static async getUserInfo(){
-        await axios.get(userInfoURL,{
+        return await axios.get(userInfoURL,{
             headers: {Authorization: `Bearer ${localStorage.getItem("accessToken")}`}}).then(data =>{
-                console.log(data);
-                localStorage.setItem("isLecture",data.is_lecture);
-                localStorage.setItem("isStudent",data.is_student);
+                return data.data;
             }).catch(error => console.log(error));
     }
 
     static async refreshToken() {
-        console.log("refresh\n");
         return axios.post(refreshURL, {refresh: localStorage.getItem("refreshToken")}).then(response => {
             localStorage.setItem("accessToken", response.data.access);
         });
@@ -58,31 +52,7 @@ export default class Entry {
         localStorage.setItem("accessToken", null);
     }
 
-
-    //TODO:
-    //add protection from recursion
-
-    static async sendGet(url) {
-        return new Promise((resolve, reject) => {
-            axios.get(url, {
-                headers: {Authorization: `Bearer ${localStorage.getItem("accessToken")}`}
-            }).then(
-                async response => {
-                    resolve(response)
-                },
-                async e => {
-                    if ((((Error)(e)).message).localeCompare("Error: Request failed with status code 401\n")) {
-                        return this.refreshToken().then(async () => this.sendGet(url))
-                    } else {
-                        reject(e)
-                    }
-                }
-            );
-            }
-        );
-    }
-
-    async getUsers(){
+    static async getUsers(){
         return await axios.get(registerURL,{
             headers: {Authorization: `Bearer ${localStorage.getItem("accessToken")}`}
         }).then(response =>{
@@ -91,7 +61,7 @@ export default class Entry {
         console.error(e);
         });  
     }
-    async getUser(firstName,lastName){
+    static async getUser(firstName,lastName){
         var users;
         await this.getUsers().then(data => users = data);
         users=users.filter(user => (user.first_name === firstName && user.last_name===lastName));    

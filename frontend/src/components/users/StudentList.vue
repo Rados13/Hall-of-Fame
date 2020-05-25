@@ -12,7 +12,6 @@
 import StudentElem from './StudentElem.vue';
 import Entry from '../../services/Entry.js';
 
-    const baseURL = 'http://127.0.0.1:8000/api/users/';
 
 export default {
     name: 'StudentList',
@@ -24,18 +23,11 @@ export default {
             students: []
         }
     },
-    // props: ['students'],
     created() {
-        this.getUsers();
-        // new Entry().getUsers().then(data=> this.students = data);
-    },
-    methods: {
-        getUsers() {
-            Entry.sendGet(baseURL).then(r => {this.students = r.data; this.$forceUpdate();}, r => console.log(r));
-                // console.log();
-        }
-    }
-  
+        Entry.getUsers().then(data => {
+            this.students=data;
+        });
+    },  
 }
 </script>
 

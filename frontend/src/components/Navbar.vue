@@ -1,18 +1,21 @@
 <template>
     <div id='app'>
-        <!-- <div v-if="localStorage.getItem('refreshToken')===null">     -->
+        <div v-if="!isLogged">    
             <ul> <router-link to="/login">Login</router-link></ul>
             <ul> <router-link to="/register">Register</router-link></ul>
-        <!-- </div> -->
-        <!-- <div v-if="localStorage.getItem('isStudent')===true"> -->
+        </div>
+        <div v-if="isStudent">
             <ul> <router-link to="/groups">Groups list</router-link> </ul>
             <ul> <router-link to="/studentgroups">My student groups</router-link> </ul>
-        <!-- </div> -->
-        <!-- <div v-if="localStorage.getItem('isLecture')===true"> -->
+        </div>
+        <div v-if="isLecture">
             <ul> <router-link to="/students">User data</router-link> </ul>
             <ul> <router-link to="/addGroup">Create group</router-link> </ul>
             <ul> <router-link to="/lecturegroups">My lecture groups</router-link> </ul>
-        <!-- </div> -->
+        </div>
+        <div v-if="isLogged">
+            <a @click="logout">Logout</a>
+        </div>
     </div>
 </template>
 
@@ -21,11 +24,21 @@
 
 export default {
     name: 'NavbarApp',
-    data(){
-        return {
-            isLecture: false,
-            isAdmin: false,
-            isLogin: false
+    computed:{
+        isLecture(){
+            return this.$store.state.isLecture || this.$store.state.isAdmin;
+        },
+        isStudent(){
+            return this.$store.state.isStudent || this.$store.state.isAdmin;
+        },
+        isLogged(){
+            return this.$store.state.isLogged;
+        }
+    },
+    methods:{
+        logout(){
+            this.$store.commit({type: 'logout'});
+            this.$router.push('/login');
         }
     }
 }

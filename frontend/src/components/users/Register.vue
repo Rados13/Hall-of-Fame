@@ -30,8 +30,10 @@
             }
         },
         methods: {
-            register() {
-                new Entry(this.$router).register(this.email, this.first_name, this.last_name, this.password);
+            async register() {
+                await new Entry(this.$router).register(this.email, this.first_name, this.last_name, this.password);
+                this.$store.commit('getInfo');
+                this.$store.dispatch({type: 'refreshThread'});
             },
         }
     }

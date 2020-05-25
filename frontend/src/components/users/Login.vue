@@ -26,10 +26,10 @@
             }
         },
         methods: {
-            login() {
-                console.log("Start");
-                new Entry(this.$router).login(this.email, this.password);
-                console.log("End");
+            async login() {
+                await new Entry(this.$router).login(this.email, this.password);                    
+                this.$store.commit({type: 'getInfo'});
+                this.$store.dispatch({type: 'refreshThread'});
             }
         }
     }

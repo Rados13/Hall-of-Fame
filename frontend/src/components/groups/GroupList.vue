@@ -10,7 +10,6 @@
 <script>
 
 import GroupElem from './GroupElem.vue';
-import GroupRUD from '../../services/GroupRUD.js';
 
 
 export default {
@@ -19,15 +18,16 @@ export default {
     GroupElem
   },
   props: ['lecture','student'],
-  data(){
-    return {
-      groups: []
+  computed:{
+      groups(){
+        return this.$store.state.groups;
     }
   },
   created(){
-    if(this.student){ GroupRUD.getStudentGroups().then(data=> this.groups = data);}
-    else if(this.lecture){ GroupRUD.getLectureGroups().then(data=> this.groups =data);  }
-    else{ GroupRUD.getGroups().then(data => this.groups = data); }
+    var param = "all";
+    if(this.student)param="student";
+    if(this.lecture)param="lecture";
+    this.$store.commit('getGroups',param);
   }
   
 }

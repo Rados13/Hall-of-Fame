@@ -1,7 +1,6 @@
 
 <template>
 
-    <!-- <div v-bind:class="{'styleclass':value}"> If value is True set styleclass on this div -->
     <div class="list-item"> 
         <div v-if="nameChange">
             <p> Course name: {{group.course}} 
