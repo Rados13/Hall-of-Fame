@@ -9,5 +9,4 @@ urlpatterns = [
     path('<int:pk>/markAll/', MarkAllPostView.as_view(), name='mark-all'),
     path('<int:pk>/finalGrade/', FinalGradeAPIView.as_view(), name='mark-all'),
     path('<int:pk>/student/', StudentInGroupRUDView.as_view(), name='studentInGroup-rud'),
-
 ]

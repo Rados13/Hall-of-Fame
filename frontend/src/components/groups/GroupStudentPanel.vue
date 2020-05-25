@@ -5,8 +5,8 @@
             <p> Day: {{dateTime.day_of_week}}  time:  {{dateTime.time}} </p> 
         </div>  
 
-        <div v-bind:key="lecture.lecture_id" v-for="lecture in group.lectures_list">    
-           <p> Lecture: {{lecture.first_name}} {{lecture.last_name}} </p>
+        <div v-bind:key="elem.lecture.pk" v-for="elem in group.lectures_list">    
+           <p> Lecture: {{elem.lecture.first_name}} {{elem.lecture.last_name}} </p>
         </div>    
 
         <div v-bind:key="student.enrolled_id" v-for="student in group.enrolled_list">
@@ -23,7 +23,9 @@
         </div>
         <button class="button" @click="createMail">{{mailButtonText}}</button>
         <div v-if="sendMail">
-            <MailForm v-bind:usersList="group.lectures_list" @sended='createMail'></MailForm>
+            <MailForm v-bind:users_list="group.lectures_list" 
+            v-bind:type= "'student'"
+            @sended='createMail'></MailForm>
         </div>
 
     </div>
@@ -61,7 +63,6 @@ export default {
     },
     methods:{
         createMail(){
-            console.log("Happen");
             this.mailButtonText = this.sendMail?"Create mail to lecture" :"Discard mail"; 
             this.sendMail = !this.sendMail;
         }

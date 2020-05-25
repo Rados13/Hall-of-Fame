@@ -6,8 +6,8 @@
         <div v-bind:key="dateTime.day_of_week" v-for="dateTime in group.date_time">    
             <p> Day: {{dateTime.day_of_week}} hour of start: {{dateTime.time}}</p>
         </div>    
-        <div v-bind:key="lecture.lecture_id" v-for="lecture in group.lectures_list">    
-            <p> Lecture: {{lecture.first_name}}  {{lecture.last_name}}</p>
+        <div v-bind:key="elem.pk" v-for="elem in group.lectures_list">    
+            <p> Lecture: {{elem.lecture.first_name}}  {{elem.lecture.last_name}}</p>
         </div>    
         <div class="buttons">
         <button v-if="!isStudent && !isLecture" @click="signFor(group.pk)" class='button'>Sign for course</button>

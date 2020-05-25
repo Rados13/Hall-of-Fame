@@ -94,6 +94,12 @@ export default class Entry {
     async getUser(firstName,lastName){
         var users;
         await this.getUsers().then(data => users = data);
-        return users.filter(user => (user.first_name === firstName && user.last_name===lastName));    
+        users=users.filter(user => (user.first_name === firstName && user.last_name===lastName));    
+        if(users.length>0){
+            users=users[0];
+            delete users['password'];
+            delete users['email'];
+        }else {users = null}
+        return users;
     }
 }

@@ -22,17 +22,21 @@
 
 
         <div v-bind:key="lecture.lecture_id" v-for="lecture in group.lectures_list">    
-            <GroupLecture v-bind:lecture = "lecture" @updateLecture = "updateLecture" @deleteLecture="deleteLecture" />
+            <GroupLecture v-bind:lecture = "lecture" @updateLecture ="updateLecture" @deleteLecture="deleteLecture" />
         </div>    
-        <button @click="addLecture" class='button'>Add lecture</button>
 
+        <div v-if="addLectureBool">
+            <GroupLecture v-bind:lecture="null" @updateLecture="addLecture" @deleteLecture="addLectureBool=false" />
+        </div>
+        <button @click="addLectureBool= !addLectureBool" class='button'>Add lecture</button>
+        
 
         <button @click="showMarks=!showMarks" class="button">Show marks</button>
         <div v-if="showMarks">
-            <div  v-bind:key="student.enrolled_id" v-for="student in group.enrolled_list">
-                <MarksList v-bind:marksList="student.marks_list" v-bind:finalGrade="student.final_grade"
-                v-bind:studentName="student.first_name+'  '+student.last_name" v-bind:studentID="student.id"
-                @changeMark='changeMark'  @deleteMark='deleteMark' @addMark='addMark(student.marks_list)'
+            <div  v-bind:key="elem.enrolled_id" v-for="elem in group.enrolled_list">
+                <MarksList v-bind:marksList="elem.marks_list" v-bind:finalGrade="elem.final_grade"
+                v-bind:studentName="elem.student.first_name+'  '+elem.student.last_name" v-bind:studentID="elem.student.pk"
+                @changeMark='changeMark'  @deleteMark='deleteMark' @addMark='addMark(elem.marks_list)'
                     ></MarksList>
             </div>
         </div>
@@ -45,10 +49,10 @@
 
         <button @click="showInattendance=!showInattendance" class="button">Show inattendance</button>
         <div v-if="showInattendance">
-            <div  v-bind:key="student.enrolled_id" v-for="student in group.enrolled_list">
-                <InattendanceList v-bind:studentName="student.first_name+'  '+student.last_name" 
-                    v-bind:inattendanceList="student.inattendances_list" @changeInattendance='changeInattendance' 
-                    @deleteInattendance='deleteInattendance' @addInattendance='addInattendance(student.inattendances_list)'
+            <div  v-bind:key="elem.enrolled_id" v-for="elem in group.enrolled_list">
+                <InattendanceList v-bind:student="elem.student" 
+                    v-bind:inattendanceList="elem.inattendances_list" @changeInattendance='changeInattendance' 
+                    @deleteInattendance='deleteInattendance' @addInattendance='addInattendance(elem.inattendances_list)'
                     ></InattendanceList>
             </div>
         </div>
@@ -60,7 +64,8 @@
         </div>
         <button class="button" @click="createMail">{{mailButtonText}}</button>
         <div v-if="sendMail">
-            <MailForm v-bind:usersList="group.enrolled_list" 
+            <MailForm v-bind:users_list="group.enrolled_list" 
+            v-bind:type= "'lecture'"
             @sended='createMail'
             ></MailForm>
         </div>
@@ -101,6 +106,7 @@ export default {
             showMarks: false,
             showInattendance: false,
             addAllStudentMark:false,
+            addLectureBool: false,
             showGroupStats: "Show stats",
             groupStatsDictionary: null,
             mailButtonText: "Create mail to students",
@@ -125,21 +131,22 @@ export default {
         changeCourseName(){
             this.nameChange = !this.nameChange;
         },
-        addLecture(){
-            this.group.lectures_list.push({lecture_id: null,main_lecture: false});
+        addLecture(lecture,firstName,lastName){
+            new Entry().getUser(firstName,lastName).then(data =>{
+                if(data!==null) this.group.lectures_list.push({"lecture": data,"main_lecture": false});
+            });
+            this.addLectureBool = false;
         },
         updateLecture(lecture,firstName,lastName){
             new Entry().getUser(firstName,lastName).then(data=>{
                 if( data!== null){
-                    var newLecture = this.group.lectures_list.filter(elem => elem.lecture_id===lecture.lecture_id)[0];
-                    newLecture.lecture_id=data[0].pk;
-                    newLecture.first_name = firstName;
-                    newLecture.last_name = lastName;
+                    var newLecture = this.group.lectures_list.filter(elem => elem.lecture.pk===lecture.pk)[0];
+                    newLecture.lecture=data[0];
                 }
             }).catch(e=>console.log(e));
         },
-        deleteLecture(lecture){
-            this.group.lectures_list = this.group.lectures_list.filter(elem => elem.lecture_id !== lecture.lecture_id);
+        deleteLecture(elemOfArray){
+            this.group.lectures_list = this.group.lectures_list.filter(elem => elem.lecture.pk !== elemOfArray.lecture.pk);
         },
 
 
@@ -154,7 +161,7 @@ export default {
             dateTime.time = time;
         },
         getEnrolled(id){
-            return this.group.enrolled_list.filter(elem=> elem.id===id)[0];
+            return this.group.enrolled_list.filter(elem=> elem.student.pk===id)[0];
         },
 
 
@@ -165,10 +172,6 @@ export default {
             mark.max_points = maxPoints;
         },
         deleteMark(studentID,mark){
-            console.log(studentID);
-            console.log(mark);
-            console.log(this.getEnrolled(studentID).marks_list);
-            console.log(this.getEnrolled(studentID).marks_list.filter(elem => elem !== mark));
             this.getEnrolled(studentID).marks_list = this.getEnrolled(studentID).marks_list.filter(elem => elem !== mark);
         },
         addMark(marksList){

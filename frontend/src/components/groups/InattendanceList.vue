@@ -1,6 +1,6 @@
 <template>
     <div class='item-list'>
-        <p>{{this.studentName}} <button @click="addInattendance" class="button">Add inattendance</button> </p>
+        <p>{{this.student.first_name}}   {{this.student.last_name}} <button @click="addInattendance" class="button">Add inattendance</button> </p>
         <div v-bind:key="inatt.class_num" v-for="inatt in inattendanceList">
            <InattendanceElem v-bind:inattendance="inatt" @deleteInattendance="$emit('deleteInattendance',student.pk,inatt)" 
            @changeInattendance="changeInattendance"></InattendanceElem>
@@ -15,7 +15,7 @@ export default {
     components:{
         InattendanceElem,
     },
-    props: ['studentName','inattendanceList'],
+    props: ['student','inattendanceList'],
     methods:{
         changeInattendance(inattendance,classNum,justified){
             this.$emit('changeInattendance',inattendance,classNum,justified);

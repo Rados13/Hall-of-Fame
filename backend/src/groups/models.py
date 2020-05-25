@@ -1,8 +1,6 @@
 from django.core.exceptions import ValidationError
 from djongo import models
 from django import forms
-from django.urls import reverse
-from rest_framework.reverse import reverse as api_reverse
 from HallOfFame.settings import AUTH_USER_MODEL
 
 
@@ -84,9 +82,9 @@ class Lecture(models.Model):
     main_lecture = models.BooleanField(default=True)
     objects = models.DjongoManager()
 
-    def __iter__(self):
-        yield 'lecture_id', self.lecture
-        yield 'main_lecture', self.main_lecture
+    # def __iter__(self):
+    #     yield 'lecture_id', self.lecture
+    #     yield 'main_lecture', self.main_lecture
     # class Meta:
     #     abstract = True
 

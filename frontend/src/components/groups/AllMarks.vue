@@ -2,11 +2,11 @@
     <form action='#' @submit.prevent = "$emit('addAllMark',grades,forWhat,maxPoints)">
     Name of mark: <input type='text' v-bind:description=forWhat v-model='forWhat'>
     Max points: <input type='number' v-bind:description=maxPoints v-model='maxPoints'>
-    <div class='item-list' v-bind:key="student.user" v-for="student in studentList">
+    <div class='item-list' v-bind:key="elem.user" v-for="elem in studentList">
         <p>
-            {{student.first_name}}  {{student.last_name}} 
-            Value: <input type='number' v-bind:key=grades[student.student][value] v-model='grades[student.student][value]'>
-            Note: <input type='text' v-bind:note=grades[student.student][note] v-model='grades[student.student][note]'>
+            {{elem.student.first_name}}  {{elem.student.last_name}} 
+            Value: <input type='number' v-bind:key=grades[elem.student.pk][value] v-model='grades[elem.student.pk][value]'>
+            Note: <input type='text' v-bind:note=grades[elem.student.pk][note] v-model='grades[elem.student.pk][note]'>
         </p>
     </div>
     <p><input type='submit' value='Submit' ></p>
@@ -28,9 +28,9 @@ export default {
     },
     created(){
         for(const elem of this.studentList){
-            this.grades[elem.student] = {};
-            this.grades[elem.student][this.value] = 0;
-            this.grades[elem.student][this.note]="";
+            this.grades[elem.student.pk] = {};
+            this.grades[elem.student.pk][this.value] = 0;
+            this.grades[elem.student.pk][this.note]="";
         }
     },
 }

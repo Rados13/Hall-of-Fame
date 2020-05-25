@@ -1,6 +1,6 @@
 <template>
          <div v-if="!change">
-            <p> Class: {{inattendance.class_num}}   justified {{inattendance.justified?"justified":"unjustified"}}
+            <p> Class num: {{inattendance.class_num}}   justified {{inattendance.justified?"justified":"unjustified"}}
                 <button @click="change=!change" class='button'>Modify</button>
                 <button @click="$emit('deleteInattendance',inattendance)" class="del">X</button>               
             </p>

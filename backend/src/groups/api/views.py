@@ -1,12 +1,13 @@
 from groups.queries import Querying
 from rest_framework import generics, mixins, status
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .serializers import GroupSerializer
 from djongo.models import Q
 from .permissions import *
 from groups.models import Group, Enrolled, Mark
 from ..stats import *
+from students.api.serializers import StudentGroupsSerializer
+from lectures.api.serializers import LectureGroupsSerializer
 
 
 def get_lectures_names_in_dict(elem):
@@ -29,13 +30,9 @@ class GroupAPIView(mixins.CreateModelMixin, generics.ListAPIView):
 
     def get(self, request, *args, **kwargs):
         queryset = Group.objects.all()
-        result = []
-        for elem in queryset:
-            elem.enrolled_list = []
-            lectrues_names = get_lectures_names_in_dict(elem)
-            elem_serialized = self.get_serializer(elem).data
-            elem_serialized['lectures_list'] = lectrues_names
-            result.append(elem_serialized)
+        result = [self.get_serializer(elem).data for elem in list(queryset)]
+        for elem in result:
+            elem.pop('enrolled_list', None)
         return Response(result, status=status.HTTP_200_OK)
 
     def get_queryset(self):
@@ -50,7 +47,8 @@ class GroupAPIView(mixins.CreateModelMixin, generics.ListAPIView):
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer()
-        request.data['lectures_list'] = [{'lecture': get_user_from_request(request), 'main_lecture': True}]
+        user = get_user_from_request(request)
+        request.data['lectures_list'] = [{'lecture': user, 'main_lecture': True}]
         result = serializer.create(request.data)
         if result is not None:
             result.save()
@@ -67,23 +65,14 @@ class GroupRUDView(generics.RetrieveUpdateDestroyAPIView):
     def get(self, request, *args, **kwargs):
         obj = self.get_object()
 
-        lectures_names = get_lectures_names_in_dict(obj)
-        students_names = get_student_names_in_dict(obj)
-
         elem_serialized = self.get_serializer(obj).data
-        elem_serialized['lectures_list'] = lectures_names
-        for elem in elem_serialized['enrolled_list']:
-            elem_names = list(filter(lambda x: x['id'] == elem['student'], students_names))[0]
-            elem['first_name'] = elem_names['first_name']
-            elem['last_name'] = elem_names['last_name']
-            elem['id'] = elem_names['id']
 
         if IsLecture().has_object_permission(request, self, obj):
             return Response(elem_serialized, status=status.HTTP_200_OK)
         elif IsStudent().has_object_permission(request, self, obj):
             id = get_id_from_token(request)
-            elem_serialized.enrolled_list = [filter(
-                lambda elem: elem['id'] == id, elem_serialized['enrolled_list']), ]
+            elem_serialized['enrolled_list'] = [filter(
+                lambda elem: elem['student']['pk'] == id, elem_serialized['enrolled_list']), ]
             return Response(elem_serialized, status=status.HTTP_200_OK)
         return Response(None, status=status.HTTP_401_UNAUTHORIZED)
 
@@ -100,6 +89,10 @@ class GroupRUDView(generics.RetrieveUpdateDestroyAPIView):
         serializer = self.get_serializer(obj)
         serializer = self.get_serializer(data=serializer.data)
         if serializer.is_valid(raise_exception=True):
+            for elem in obj.lectures_list:
+                tmp = LectureGroupsSerializer().create({"user": elem.lecture,"group": obj})
+                print(tmp)
+                tmp.save()
             obj.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         print(serializer.errors)
@@ -129,6 +122,11 @@ class StudentInGroupRUDView(generics.RetrieveUpdateDestroyAPIView):
         obj.enrolled_list.append(Enrolled(student=user))
         serializer = self.get_serializer(data=self.get_serializer(obj).data)
         if serializer.is_valid():
+            student_groups = StudentGroupsSerializer().create(
+                {"user": get_user_from_request(request), "group": self.get_object()})
+            if student_groups is None:
+                return Response(None, status=status.HTTP_400_BAD_REQUEST)
+            student_groups.save()
             obj.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         print(serializer.errors)
@@ -185,7 +183,7 @@ class StatsAPIView(generics.ListAPIView):
         students = obj.get_student_list()
         result['total'] = avg_points_all_students(students)
 
-        result['link'] = plot_data(str(groups_id)+"stats", result, request.get_host())
+        result['link'] = plot_data(str(groups_id) + "stats", result, request.get_host())
 
         return Response(result, status=status.HTTP_200_OK)
 

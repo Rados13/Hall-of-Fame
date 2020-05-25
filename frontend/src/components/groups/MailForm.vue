@@ -4,7 +4,7 @@
             <button @click="selectAll" class="button">{{btnText}}</button>
             <div class="item-list" v-bind:key="user.pk" v-for="user in usersList">
                 <p>{{user.first_name}}   {{user.last_name}} 
-                    <input type='checkbox' value="users[user.pk]" v-model='users[user.id]'/>
+                    <input type='checkbox' value="users[user.pk]" v-model='users[user.pk]'/>
                 </p>
             </div>
             <input type='text' value="title" v-model='title'/>
@@ -20,18 +20,22 @@ import MailSender from '../../services/Mail.js';
 
 export default {
     name: "MailForm",
-    props: ['usersList'],
+    props: ['users_list',"type"],
         data(){
         return {
             users: {},
+            usersList: [],
             title:"Mail title",
             text:"",
             btnText:"Select all",
         }
     },
     created(){
+        for(const elem of this.users_list){
+            this.usersList.push(this.type==="lecture"?elem.student:elem.lecture);
+        }
         for(const elem of this.usersList){
-            this.users[elem.id] = false;
+            this.users[elem.pk] = false;
         }
     },
     methods:{

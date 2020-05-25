@@ -3,7 +3,20 @@ from users.models import User
 from groups.models import *
 
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            # 'uri',
+            'pk',
+            'first_name',
+            'last_name',
+        ]
+
+
 class LectureSerializer(serializers.ModelSerializer):
+    lecture = UserSerializer()
+
     class Meta:
         model = Lecture
         fields = [
@@ -52,6 +65,7 @@ class MarkSerializer(serializers.ModelSerializer):
 
 
 class EnrolledSerializer(serializers.ModelSerializer):
+    student = UserSerializer()
     inattendances_list = serializers.ListField(child=InattendenceSerializer(), allow_null=True)
     marks_list = serializers.ListField(child=MarkSerializer(), allow_null=True)
 
@@ -111,17 +125,17 @@ class GroupSerializer(serializers.ModelSerializer):
         return user_obj
 
     def update(self, instance, validated_data):
-        print(validated_data)
         if 'course' in validated_data:
             instance.course = validated_data['course']
         if 'date_time' in validated_data:
             instance.date_time = list(map(lambda elem: DayTime(**elem), validated_data['date_time']))
         if 'lectures_list' in validated_data:
             for elem in validated_data['lectures_list']:
-                elem.pop('first_name', None)
-                elem.pop('last_name', None)
+                elem['pk'] = elem['lecture']['pk']
+                elem.pop('lecture', None)
+
             instance.lectures_list = list(map(
-                lambda elem: Lecture(lecture=User.objects.get(pk=elem['id']), **elem),
+                lambda elem: Lecture(lecture=User.objects.get(pk=elem['pk']), **elem),
                 validated_data['lectures_list']))
         if 'enrolled_list' in validated_data:
             instance.enrolled_list = list(map(lambda elem: self.create_enrolled_from_json(**elem),
@@ -131,7 +145,7 @@ class GroupSerializer(serializers.ModelSerializer):
         return instance
 
     def create_enrolled_from_json(self, *args, **kwargs):
-        user = User.objects.filter(pk=kwargs.get('student'))[0]
+        user = User.objects.filter(pk=kwargs.get('student')['pk'])[0]
         return Enrolled(
             student=user,
             inattendances_list=list(map(lambda elem: Inattendence(**elem), kwargs.get('inattendances_list'))),
