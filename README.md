@@ -18,14 +18,14 @@ Then you need to add file credentials.json in backend\src
 You don't have to add user and password if you don't want send mail by this app.
 ```json
 {
-  "user": ### Your gmail mail,
-  "password": ### password for gmail mail,
-  "SECRET_KEY": ### Your secret app key,
+  "user": "Your gmail mail",
+  "password": "password for gmail mail",
+  "SECRET_KEY": "Your secret app key",
 }
 ```
 Next step is to migrate data and initialize database
 
-```python
+```
 python3 manage.py migrate
 ```
 
@@ -79,8 +79,16 @@ Short description of endpoints for other request method
 ## Frontend details
 
 In app user can register to service, and login to it.
-After he is logged in, he can sign up to listed groups. In groups which he is include he can see his marks and inattendances and send mail to lectures.
-Lecture can create new group, add mark to specified student or for all student mark with the same name. He can add inattendance to specified student. Calculate final grade for all students and send mail to specified students.
+As student he can:
+- sign up to listed groups, which he isn't already,
+- in his groups he can see his marks and inattendances and send mail to lectures,
+
+As lecture he can:
+- create new group,
+- add mark to specified student or for all student mark with the same name,
+- add inattendance to specified student. 
+- calculate final grade for all students 
+- send mail to specified students.
 
 
 
