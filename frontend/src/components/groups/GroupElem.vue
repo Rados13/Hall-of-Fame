@@ -10,7 +10,7 @@
             <p> Lecture: {{elem.lecture.first_name}}  {{elem.lecture.last_name}}</p>
         </div>    
         <div class="buttons">
-        <button v-if="!isStudent && !isLecture" @click="signFor(group.pk)" class='button'>Sign for course</button>
+        <button v-if="!isStudent && !isLecture && $store.state.isLogged" @click="signFor(group.pk)" class='button'>Sign for course</button>
         <button v-if="isStudent" @click="goToStudentPanel(group.pk)" class='button'>Show my grades and inattendace</button>    
         <button v-if="isLecture" @click="goToGroupPanel(group.pk)" class='button'>Go to group panel</button>    
         </div>

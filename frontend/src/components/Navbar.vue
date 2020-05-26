@@ -4,8 +4,8 @@
             <ul> <router-link to="/login">Login</router-link></ul>
             <ul> <router-link to="/register">Register</router-link></ul>
         </div>
+        <ul> <router-link to="/groups">Groups list</router-link> </ul>
         <div v-if="isStudent">
-            <ul> <router-link to="/groups">Groups list</router-link> </ul>
             <ul> <router-link to="/studentgroups">My student groups</router-link> </ul>
         </div>
         <div v-if="isLecture">

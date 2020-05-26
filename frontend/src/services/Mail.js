@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const mailURL = 'http://127.0.0.1:8000/mail/';
+const mailURL = 'http://127.0.0.1:8000/api/mail/';
 
 
 export default class MailSender {

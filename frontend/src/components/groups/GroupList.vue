@@ -2,7 +2,7 @@
   <div class="hello">
     <h1>Hello world</h1>
   <div v-bind:key="group.pk" v-for="group in groups">
-    <GroupElem v-bind:group = "group" v-bind:isLecture="lecture" v-bind:isStudent="student"/>
+    <GroupElem v-bind:group = "group" v-bind:isLecture="isLecture" v-bind:isStudent="isStudent"/>
   </div>
   </div>
 </template>
@@ -17,17 +17,32 @@ export default {
   components:{
     GroupElem
   },
-  props: ['lecture','student'],
+  props: ['type'],
   computed:{
       groups(){
         return this.$store.state.groups;
     }
   },
+  data(){
+    return {
+      isLecture: false,
+      isStudent: false,
+    }
+  },
+  watch:{
+    '$route'(){
+      this.getGroups();
+    }
+  },
   created(){
-    var param = "all";
-    if(this.student)param="student";
-    if(this.lecture)param="lecture";
-    this.$store.commit('getGroups',param);
+    this.getGroups();
+  },
+  methods:{
+    getGroups(){
+      this.isLecture = this.type==='lecture';
+      this.isStudent = this.type==='student';
+      this.$store.commit('getGroups',this.type);
+    }
   }
   
 }

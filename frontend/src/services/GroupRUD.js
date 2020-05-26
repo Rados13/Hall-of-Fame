@@ -40,8 +40,6 @@ export default class {
     static async signFor(id){
         await axios.post(baseURL+id+"/student/",{
           headers: {Authorization: `Bearer ${localStorage.getItem("accessToken")}`},
-        }).then(response => {
-          console.log(response.data);
         }).catch(e => console.error(e));
     }
 
@@ -52,7 +50,6 @@ export default class {
     }
 
     static async updateGroup(group){
-      console.log(group);
       await axios.patch(baseURL+group.pk+'/',{
         headers: {Authorization: `Bearer ${localStorage.getItem("accessToken")}`},
         group: {course: group.course, date_time: group.date_time, 

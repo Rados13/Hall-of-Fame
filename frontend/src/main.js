@@ -19,11 +19,11 @@ const routes = [
   { path: '/register', component: Register },
   { path: '/students', component: StudentList },
   { path: '/addGroup', component: CreateGroup },
-  { path: '/groups', component: GroupList },
-  { path: '/studentgroups', component: GroupList, props:{default: true, student:true}},
-  { path: '/studentgroups/:groupID', component: GroupStudentPanel, props: {default: true,student: true}},
-  { path: '/lecturegroups', component: GroupList, props:{default: true, lecture:true}},
-  { path: '/lecturegroups/:groupID', component: GroupPanel, props: {default: true,student: true}}
+  { path: '/groups', component: GroupList, props: {type: "all"}},
+  { path: '/studentgroups', component: GroupList, props:{type: "student"}},
+  { path: '/studentgroups/:groupID', component: GroupStudentPanel, props:{type: "student"}},
+  { path: '/lecturegroups', component: GroupList, props:{type: "lecture"}},
+  { path: '/lecturegroups/:groupID', component: GroupPanel, props:{type: "student"}}
 ]
 const router = new VueRouter({
     routes,

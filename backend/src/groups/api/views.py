@@ -90,7 +90,7 @@ class GroupRUDView(generics.RetrieveUpdateDestroyAPIView):
         serializer = self.get_serializer(data=serializer.data)
         if serializer.is_valid(raise_exception=True):
             for elem in obj.lectures_list:
-                tmp = LectureGroupsSerializer().create({"user": elem.lecture,"group": obj})
+                tmp = LectureGroupsSerializer().create({"user": elem.lecture, "group": obj})
                 print(tmp)
                 tmp.save()
             obj.save()
@@ -116,9 +116,12 @@ class StudentInGroupRUDView(generics.RetrieveUpdateDestroyAPIView):
 
         if not user.is_student:
             return Response("You are not student so you can't sign for course", status=status.HTTP_400_BAD_REQUEST)
-        if user in obj.enrolled_list:
+        students = [elem.student for elem in obj.enrolled_list]
+        if user in students:
             return Response("You are already sign for that course", status=status.HTTP_400_BAD_REQUEST)
-
+        lectures = [elem.lecture for elem in obj.lectures_list]
+        if user in lectures:
+            return Response("You are already lecture in this group", status=status.HTTP_400_BAD_REQUEST)
         obj.enrolled_list.append(Enrolled(student=user))
         serializer = self.get_serializer(data=self.get_serializer(obj).data)
         if serializer.is_valid():

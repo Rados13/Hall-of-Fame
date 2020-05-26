@@ -23,7 +23,7 @@ urlpatterns = [
     path('api/groups/', include('groups.api.urls', namespace='api-groups', )),
     path('api/lectures/', include('lectures.api.urls', namespace='api-lectures', )),
     path('api/students/', include('students.api.urls', namespace='api-students', )),
-    path('mail/', include('mail.api.urls',namespace='mail')),
+    path('api/mail/', include('mail.api.urls',namespace='mail')),
     path('api/token', TokenObtainPairView.as_view(), name='api-login'),
     path('api/token/refresh', TokenRefreshView.as_view(), name='api-login'),
     path('admin/', admin.site.urls),
