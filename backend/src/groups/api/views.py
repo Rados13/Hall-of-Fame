@@ -8,7 +8,7 @@ from groups.models import Group, Enrolled, Mark
 from ..stats import *
 from students.api.serializers import StudentGroupsSerializer
 from lectures.api.serializers import LectureGroupsSerializer
-
+from lectures.models import LectureGroups
 
 def get_lectures_names_in_dict(elem):
     return list(
@@ -51,6 +51,7 @@ class GroupAPIView(mixins.CreateModelMixin, generics.ListAPIView):
         request.data['lectures_list'] = [{'lecture': user, 'main_lecture': True}]
         result = serializer.create(request.data)
         if result is not None:
+            LectureGroupsSerializer().create({"user": user, "group": result}).save()
             result.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         print(serializer.errors)
@@ -90,9 +91,7 @@ class GroupRUDView(generics.RetrieveUpdateDestroyAPIView):
         serializer = self.get_serializer(data=serializer.data)
         if serializer.is_valid(raise_exception=True):
             for elem in obj.lectures_list:
-                tmp = LectureGroupsSerializer().create({"user": elem.lecture, "group": obj})
-                print(tmp)
-                tmp.save()
+                LectureGroupsSerializer().create({"user": elem.lecture, "group": obj}).save()
             obj.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         print(serializer.errors)
