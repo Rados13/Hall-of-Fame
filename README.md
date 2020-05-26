@@ -23,7 +23,7 @@ You don't have to add user and password if you don't want send mail by this app.
   "SECRET_KEY": "Your secret app key",
 }
 ```
-Next step is to migrate data and initialize database
+Next step is to migrate data and initialize database from backend\src directory
 
 ```
 python3 manage.py migrate
