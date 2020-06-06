@@ -8,7 +8,9 @@ from groups.models import Group, Enrolled, Mark
 from ..stats import *
 from students.api.serializers import StudentGroupsSerializer
 from lectures.api.serializers import LectureGroupsSerializer
+from students.models import StudentGroups
 from lectures.models import LectureGroups
+
 
 def get_lectures_names_in_dict(elem):
     return list(
@@ -30,7 +32,19 @@ class GroupAPIView(mixins.CreateModelMixin, generics.ListAPIView):
 
     def get(self, request, *args, **kwargs):
         queryset = Group.objects.all()
+        user = get_user_from_request(request)
+        if user.is_student:
+            groups = list(StudentGroups.objects.filter(user__pk=user.pk))
+            if len(groups) > 0:
+                groups = groups[0].groups_list_id
+                queryset = list(filter(lambda elem: elem.pk not in groups, queryset))
+        if user.is_lecture:
+            groups = list(LectureGroups.objects.filter(user__pk=user.pk))
+            if len(groups) > 0:
+                groups = groups[0].groups_list_id
+                queryset = list(filter(lambda elem: elem.pk not in groups, queryset))
         result = [self.get_serializer(elem).data for elem in list(queryset)]
+
         for elem in result:
             elem.pop('enrolled_list', None)
         return Response(result, status=status.HTTP_200_OK)
@@ -51,8 +65,8 @@ class GroupAPIView(mixins.CreateModelMixin, generics.ListAPIView):
         request.data['lectures_list'] = [{'lecture': user, 'main_lecture': True}]
         result = serializer.create(request.data)
         if result is not None:
-            LectureGroupsSerializer().create({"user": user, "group": result}).save()
             result.save()
+            LectureGroupsSerializer().create({"user": user, "group": result}).save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         print(serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -72,8 +86,8 @@ class GroupRUDView(generics.RetrieveUpdateDestroyAPIView):
             return Response(elem_serialized, status=status.HTTP_200_OK)
         elif IsStudent().has_object_permission(request, self, obj):
             id = get_id_from_token(request)
-            elem_serialized['enrolled_list'] = [filter(
-                lambda elem: elem['student']['pk'] == id, elem_serialized['enrolled_list']), ]
+            elem_serialized['enrolled_list'] = list(filter(
+                lambda elem: elem['student']['pk'] == id, elem_serialized['enrolled_list']))
             return Response(elem_serialized, status=status.HTTP_200_OK)
         return Response(None, status=status.HTTP_401_UNAUTHORIZED)
 

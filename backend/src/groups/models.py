@@ -4,12 +4,13 @@ from django import forms
 from HallOfFame.settings import AUTH_USER_MODEL
 
 
-# Create your models here.
-
 class DayTime(models.Model):
     day_of_week = models.CharField(max_length=20)
     time = models.TimeField()
     objects = models.DjongoManager()
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
     def __iter__(self):
         yield 'day_of_week', self.day_of_week
@@ -30,6 +31,9 @@ class Mark(models.Model):
     for_what = models.CharField(max_length=100)
     note = models.CharField(max_length=250, blank=True, null=True)
     objects = models.DjongoManager()
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
     # class Meta:
     #     abstract = True
@@ -53,6 +57,9 @@ class Inattendence(models.Model):
     # class Meta:
     #     abstract = True
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
 
 class InattendenceForm(forms.ModelForm):
     class Meta:
@@ -62,13 +69,16 @@ class InattendenceForm(forms.ModelForm):
 
 class Enrolled(models.Model):
     student = models.ForeignKey(AUTH_USER_MODEL, models.PROTECT, blank=False, null=False)
-    inattendances_list = models.ArrayField(model_container=Inattendence, default=[],blank=False, null=False)
-    marks_list = models.ArrayField(model_container=Mark, default=[],blank=False, null=False)
+    inattendances_list = models.ArrayField(model_container=Inattendence, default=[], blank=False, null=False)
+    marks_list = models.ArrayField(model_container=Mark, default=[], blank=False, null=False)
     final_grade = models.FloatField(blank=True, null=True)
     objects = models.DjongoManager()
 
     # class Meta:
     #     abstract = True
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 
 class EnrolledForm(forms.ModelForm):
@@ -87,6 +97,9 @@ class Lecture(models.Model):
     #     yield 'main_lecture', self.main_lecture
     # class Meta:
     #     abstract = True
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 
 class LectureForm(forms.ModelForm):

@@ -14,7 +14,7 @@
             <ul> <router-link to="/lecturegroups">My lecture groups</router-link> </ul>
         </div>
         <div v-if="isLogged">
-            <a @click="logout">Logout</a>
+            <ul><a @click="logout">Logout</a></ul>
         </div>
     </div>
 </template>
@@ -45,13 +45,23 @@ export default {
 </script>
 
 <style scoped>
-    * {
+    div {
         display: flex;
+        flex-direction: row;
         margin: 0 10px 0 0;
         padding: 0;
         list-style: none;
-        justify-content: flex-start;
-        flex-wrap: wrap;
+        justify-content: center;
+    }
+</style>
+<style>
+    a{
+        cursor: pointer;
+        display: block;
+        color: white;
+        text-decoration: none;
+        background-color: black;
+        padding: 10px;
     }
 </style>
 

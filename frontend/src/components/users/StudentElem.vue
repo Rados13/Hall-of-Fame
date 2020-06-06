@@ -18,9 +18,9 @@ export default {
 
 <style scoped>
     .list-item{
-        background: #f4f4f4;
+        background: #222222;
         padding: 10px;
-        border-bottom: 1px #ccc dotted;
+        border-bottom: 1px #ccc outset;
     }
 
     .del {

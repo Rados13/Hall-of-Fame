@@ -4,7 +4,7 @@
         <h1>Login</h1>
         <form action='#' @submit.prevent='login'>
             <p><input type='text' placeholder="Email" v-model='email'></p>
-            <p><input type='text' placeholder="Password" v-model='password'></p>
+            <p><input type='password' placeholder="Password" v-model='password'></p>
             <p><input type='submit' value='Submit'></p>
         </form>
     </div>
