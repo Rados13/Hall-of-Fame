@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import *
 
-app_name = 'groups'
+app_name = 'groupsSecond'
 urlpatterns = [
     path('', GroupAPIView.as_view(), name='create'),
     path('stats/', StatsAPIView.as_view(), name='stats'),

@@ -1,6 +1,4 @@
 from rest_framework import permissions
-import jwt
-from HallOfFame.settings import SECRET_KEY
 from groups.api.permissions import get_id_from_token
 from users.models import User
 

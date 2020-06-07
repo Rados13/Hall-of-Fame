@@ -52,11 +52,16 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
-    'users',
-    'groups',
-    'mail',
+    'dayTime',
+    'marks',
+    'inattendances',
+    'enrolleds',
     'lectures',
-    'students'
+    'users',
+    'mail',
+    'lecturesGroups',
+    'studentsGroups',
+    'groups',
 ]
 
 AUTH_USER_MODEL = 'users.User'

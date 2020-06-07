@@ -1,88 +1,12 @@
+from dayTime.serializers import DayTimeSerializer
+from enrolleds.serializers import EnrolledSerializer
+from inattendances.models import Inattendance
+from lectures.serializers import LectureSerializer
+from marks.models import Mark
 from rest_framework import serializers
+from users.api.serializers import UserSerializer
 from users.models import User
-from groups.models import *
-
-
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = [
-            # 'uri',
-            'pk',
-            'first_name',
-            'last_name',
-        ]
-
-
-class LectureSerializer(serializers.ModelSerializer):
-    lecture = UserSerializer()
-
-    class Meta:
-        model = Lecture
-        fields = [
-            'lecture',
-            'main_lecture',
-        ]
-
-
-class DayTimeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = DayTime
-        fields = [
-            'day_of_week',
-            'time',
-        ]
-
-
-class InattendenceSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Inattendence
-        fields = [
-            'class_num',
-            'justified',
-        ]
-        extra_kwargs = {
-            'class_num': {'required': False, 'allow_null': True},
-            'justified': {'required': False, 'allow_null': True},
-        }
-
-
-class MarkSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Mark
-        fields = [
-            'value',
-            'max_points',
-            'for_what',
-            'note'
-        ]
-        extra_kwargs = {
-            'value': {'required': False, 'allow_null': True},
-            'max_points': {'required': False, 'allow_null': True},
-            'for_what': {'required': False, 'allow_null': True},
-            'note': {'required': False, 'allow_null': True},
-        }
-
-
-class EnrolledSerializer(serializers.ModelSerializer):
-    student = UserSerializer()
-    inattendances_list = serializers.ListField(child=InattendenceSerializer(), allow_null=True)
-    marks_list = serializers.ListField(child=MarkSerializer(), allow_null=True)
-
-    class Meta:
-        model = Enrolled
-        fields = [
-            'student',
-            'final_grade',
-            'inattendances_list',
-            'marks_list'
-        ]
-        extra_kwargs = {
-            'student': {'required': True, 'allow_null': False},
-            'final_grade': {'required': False, 'allow_null': True},
-            'inattendances_list': {'required': False, 'allow_null': True},
-            'marks_list': {'required': False, 'allow_null': True},
-        }
+from ..models import *
 
 
 class GroupSerializer(serializers.ModelSerializer):
@@ -148,7 +72,7 @@ class GroupSerializer(serializers.ModelSerializer):
         user = User.objects.filter(pk=kwargs.get('student')['pk'])[0]
         return Enrolled(
             student=user,
-            inattendances_list=list(map(lambda elem: Inattendence(**elem), kwargs.get('inattendances_list'))),
+            inattendances_list=list(map(lambda elem: Inattendance(**elem), kwargs.get('inattendances_list'))),
             marks_list=list(map(lambda elem: Mark(**elem), kwargs.get('marks_list')))
         )
 

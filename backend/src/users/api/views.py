@@ -1,6 +1,5 @@
 from rest_framework import generics, mixins, status
 from .serializers import CustomUserSerializer
-from djongo.models import Q
 from .permissions import IsOwnerOrReadOnly, IsLecture
 from ..models import User
 from rest_framework.filters import SearchFilter, OrderingFilter

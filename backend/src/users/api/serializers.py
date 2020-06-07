@@ -4,6 +4,18 @@ from rest_framework import serializers
 # from django.contrib.auth import get_user_model
 from users.models import User
 
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            # 'uri',
+            'pk',
+            'first_name',
+            'last_name',
+        ]
+
+
 class CustomUserSerializer(serializers.ModelSerializer):
     # uri = serializers.SerializerMethodField(read_only=True)
     User = User

@@ -29,7 +29,7 @@ export default class Entry {
         await axios.post(tokenURL, {email: email, password: password}).then(response => {
             localStorage.setItem("accessToken", response.data.access);
             localStorage.setItem("refreshToken", response.data.refresh);
-            this.$router.push('/students');
+            this.$router.push('/studentsGroups');
         }).catch(error => {
             console.log(error);
         });
