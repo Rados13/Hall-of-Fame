@@ -20,7 +20,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 urlpatterns = [
     path('api/users/', include('users.api.urls', namespace='api-users', )),
-    path('api/groupsSecond/', include('groups.api.urls', namespace='api-groups', )),
+    path('api/groups/', include('groups.api.urls', namespace='api-groups', )),
     path('api/lecturesGroups/', include('lecturesGroups.api.urls', namespace='api-lecturesGroups', )),
     path('api/studentsGroups/', include('studentsGroups.api.urls', namespace='api-studentsGroups', )),
     path('api/mail/', include('mail.api.urls',namespace='mail')),

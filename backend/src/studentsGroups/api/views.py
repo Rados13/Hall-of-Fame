@@ -14,7 +14,7 @@ class StudentsAPIView(mixins.CreateModelMixin, generics.ListAPIView):
         queryset = list(StudentGroups.objects.all())
         obj = queryset[0]
         result = {'user': UserSerializer(obj.user).data,
-                  'groupsSecond': [PartGroupSerializer(elem).data for elem in obj.groups_list.all()]}
+                  'groups': [PartGroupSerializer(elem).data for elem in obj.groups_list.all()]}
         return Response(result, status=status.HTTP_200_OK)
 
 

@@ -4,7 +4,6 @@ from users.api.serializers import UserSerializer
 from .models import *
 
 
-
 class LectureSerializer(serializers.ModelSerializer):
     lecture = UserSerializer()
 

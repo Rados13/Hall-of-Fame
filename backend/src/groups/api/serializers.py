@@ -36,8 +36,9 @@ class GroupSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         course = validated_data['course']
         date_time = []
-        for elem in validated_data['date_time']:
-            date_time.append(DayTime(**elem))
+        if validated_data['date_time'] is not None:
+            for elem in validated_data['date_time']:
+                date_time.append(DayTime(**elem))
         lectures_list = []
         for elem in validated_data['lectures_list']:
             lectures_list.append(Lecture(**elem))
@@ -51,7 +52,7 @@ class GroupSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         if 'course' in validated_data:
             instance.course = validated_data['course']
-        if 'date_time' in validated_data:
+        if 'date_time' in validated_data and validated_data['date_time'] is not None:
             instance.date_time = list(map(lambda elem: DayTime(**elem), validated_data['date_time']))
         if 'lectures_list' in validated_data:
             for elem in validated_data['lectures_list']:
@@ -61,7 +62,7 @@ class GroupSerializer(serializers.ModelSerializer):
             instance.lectures_list = list(map(
                 lambda elem: Lecture(lecture=User.objects.get(pk=elem['pk']), **elem),
                 validated_data['lectures_list']))
-        if 'enrolled_list' in validated_data:
+        if 'enrolled_list' in validated_data and validated_data['enrolled_list'] is not None:
             instance.enrolled_list = list(map(lambda elem: self.create_enrolled_from_json(**elem),
                                               validated_data['enrolled_list']))
         if 'course_end' in validated_data:

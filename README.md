@@ -39,6 +39,11 @@ If you want to see django admin-page you have to create super-user
 python3 manage.py createsuperuser
 ```
 
+First install all npm packages
+```npm
+npm i
+```
+
 To run frontend application
 ```npm
 npm run serve

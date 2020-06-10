@@ -56,6 +56,7 @@ export default class Entry {
         return await axios.get(registerURL,{
             headers: {Authorization: `Bearer ${localStorage.getItem("accessToken")}`}
         }).then(response =>{
+            console.log(response.data);
             return response.data;
         }).catch(e => {
         console.error(e);

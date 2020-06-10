@@ -14,19 +14,6 @@ from studentsGroups.models import StudentGroups
 from lecturesGroups.models import LectureGroups
 
 
-def get_lectures_names_in_dict(elem):
-    return list(
-        map(lambda x: {'first_name': x.lecture.first_name, 'last_name': x.lecture.last_name, 'id': x.lecture.pk},
-            elem.lectures_list))
-
-
-def get_student_names_in_dict(elem):
-    return list(
-        map(lambda x: {'first_name': x.student.first_name, 'last_name': x.student.last_name,
-                       'id': x.student.pk},
-            elem.enrolled_list))
-
-
 class GroupAPIView(mixins.CreateModelMixin, generics.ListAPIView):
     lookup_field = 'pk'
     serializer_class = GroupSerializer
@@ -109,7 +96,7 @@ class GroupRUDView(generics.RetrieveUpdateDestroyAPIView):
             for elem in obj.lectures_list:
                 LectureGroupsSerializer().create({"user": elem.lecture, "group": obj}).save()
             obj.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         print(serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -131,14 +118,22 @@ class StudentInGroupRUDView(generics.RetrieveUpdateDestroyAPIView):
 
         if not user.is_student:
             return Response("You are not student so you can't sign for course", status=status.HTTP_400_BAD_REQUEST)
-        students = [elem.student for elem in obj.enrolled_list]
+
+        students = [elem.student for elem in obj.enrolled_list] if obj.enrolled_list is not None else []
         if user in students:
             return Response("You are already sign for that course", status=status.HTTP_400_BAD_REQUEST)
-        lectures = [elem.lecture for elem in obj.lectures_list]
+
+        lectures = ([elem.lecture for elem in obj.lectures_list] if obj.lectures_list is not None else [])
         if user in lectures:
             return Response("You are already lecture in this group", status=status.HTTP_400_BAD_REQUEST)
-        obj.enrolled_list.append(Enrolled(student=user))
+
+        if obj.enrolled_list is not None:
+            obj.enrolled_list.append(Enrolled(student=user))
+        else:
+            obj.enrolled_list = [Enrolled(student=user)]
+
         serializer = self.get_serializer(data=self.get_serializer(obj).data)
+
         if serializer.is_valid():
             student_groups = StudentGroupsSerializer().create(
                 {"user": get_user_from_request(request), "group": self.get_object()})
@@ -179,7 +174,7 @@ class MarkAllPostView(generics.RetrieveUpdateDestroyAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def append_mark_to_student(self, student, marks, mark_name, max_points):
-        student.marks_list.append(Mark(for_what=mark_name, **marks[str(student.student.pk)], max_points=max_points))
+        student.add_mark(for_what=mark_name, **marks[str(student.student.pk)], max_points=max_points)
         return student
 
 
@@ -217,7 +212,7 @@ class FinalGradeAPIView(generics.RetrieveUpdateDestroyAPIView):
     def post(self, request, *args, **kwargs):
         obj = self.get_object()
         obj.enrolled_list = final_grade_for_all_students(obj.enrolled_list)
-        serializer = self.getserializer(data=self.get_serializer(obj).data)
+        serializer = self.get_serializer(data=self.get_serializer(obj).data)
         if serializer.is_valid():
             obj.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)

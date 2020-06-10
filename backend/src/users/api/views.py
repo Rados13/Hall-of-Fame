@@ -1,6 +1,7 @@
 from rest_framework import generics, mixins, status
 from .serializers import CustomUserSerializer
-from .permissions import IsOwnerOrReadOnly, IsLecture
+from .permissions import IsOwnerOrReadOnly
+from rest_framework.permissions import IsAdminUser
 from ..models import User
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.response import Response
@@ -16,12 +17,6 @@ class UserAPIView(mixins.CreateModelMixin, generics.ListAPIView):
 
     def get_queryset(self):
         queryset = User.objects.all()
-        # result = []
-        # perms = IsOwnerOrReadOnly()
-        # for elem in queryset:
-        #     if perms.has_object_permission(self.request,self,elem):
-        #         result.append(elem)
-        # return result
         return queryset
 
     def perform_create(self, serializer):
@@ -34,7 +29,7 @@ class UserAPIView(mixins.CreateModelMixin, generics.ListAPIView):
 class UserRUDView(generics.RetrieveUpdateDestroyAPIView):
     lookup_field = 'pk'
     serializer_class = CustomUserSerializer
-    permission_classes = [IsLecture]
+    permission_classes = [IsAdminUser]
 
     def get_queryset(self):
         return User.objects.all()
@@ -42,7 +37,7 @@ class UserRUDView(generics.RetrieveUpdateDestroyAPIView):
     def get_serializer_context(self, *args, **kwargs):
         return {"request": self.request}
 
-    def update(self, request, *args, **kwargs):
+    def patch(self, request, *args, **kwargs):
         obj = self.get_object()
         if 'is_lecture' in request.data:
             obj.is_lecture = request.data['is_lecture']

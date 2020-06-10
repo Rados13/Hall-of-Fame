@@ -19,6 +19,9 @@ class Enrolled(models.Model):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+    def add_mark(self, value=0, max_points=0, for_what="", note=""):
+        self.marks_list.append(Mark(value=value, max_points=max_points, for_what=for_what, note=note))
+
 
 class EnrolledForm(forms.ModelForm):
     class Meta:
