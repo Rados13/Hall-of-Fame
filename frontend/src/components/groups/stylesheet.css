@@ -1,39 +1,55 @@
-.list-item{
-    background: #222222;
-    padding: 10px;
-    border-bottom: 1px #ccc outset;
+.list-item {
+    background: #373737;
+    /*padding: 30px;*/
+    margin: 30px;
+    padding: 30px;
+    /*border-bottom: 1px #ccc outset;*/
     display: flex;
     flex-flow: column;
     justify-content: space-between;
 }
 
 
-.button{
-background: #ff0000;
-color: #fff;
-border: none;
-padding: 5px 9px;
-margin: 1%;
-align-self: center;
-cursor: pointer;        
+.button {
+    background: #292929;
+    color: #fff;
+    border: none;
+    padding: 8px 20px 12px 20px;
+    margin: 1%;
+    align-self: center;
+    cursor: pointer;
+}
+
+.button:hover {
+    background: #303030;
 }
 
 .del {
-background: #ff0000;
-color: #fff;
-border: none;
-padding: 5px 9px;
-border-radius: 50%;
-cursor: pointer;
-float: right;
+    background: #292929;
+    color: #fff;
+    border: none;
+    padding: 5px 9px;
+    border-radius: 50%;
+    cursor: pointer;
+    float: right;
 }
 
-.buttons{
+.del:hover {
+    background: #343434;
+}
+
+.buttons {
     display: flex;
     flex-flow: row;
     justify-content: center;
 }
 
-.oneLine{
+.oneLine {
     display: inline;
 }
+
+.course-name {
+    font-size: 30px;
+}
+
+

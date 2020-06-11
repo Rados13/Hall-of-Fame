@@ -35,11 +35,14 @@ export default class Entry {
         });
     }
 
-    static async getUserInfo(){
-        return await axios.get(userInfoURL,{
-            headers: {Authorization: `Bearer ${localStorage.getItem("accessToken")}`}}).then(data =>{
-                return data.data;
-            }).catch(error => console.log(error));
+    static async getUserInfo() {
+        let x = await axios.get(userInfoURL, {
+            headers: {Authorization: `Bearer ${localStorage.getItem("accessToken")}`}
+        }).then(data => {
+            return data.data;
+        }).catch(error => console.log(error));
+        console.log(x);
+        return x
     }
 
     static async refreshToken() {
@@ -52,25 +55,28 @@ export default class Entry {
         localStorage.setItem("accessToken", null);
     }
 
-    static async getUsers(){
-        return await axios.get(registerURL,{
+    static async getUsers() {
+        return await axios.get(registerURL, {
             headers: {Authorization: `Bearer ${localStorage.getItem("accessToken")}`}
-        }).then(response =>{
-            console.log(response.data);
+        }).then(response => {
+
             return response.data;
         }).catch(e => {
-        console.error(e);
-        });  
+            console.error(e);
+        });
     }
-    static async getUser(firstName,lastName){
+
+    static async getUser(firstName, lastName) {
         var users;
         await this.getUsers().then(data => users = data);
-        users=users.filter(user => (user.first_name === firstName && user.last_name===lastName));    
-        if(users.length>0){
-            users=users[0];
+        users = users.filter(user => (user.first_name === firstName && user.last_name === lastName));
+        if (users.length > 0) {
+            users = users[0];
             delete users['password'];
             delete users['email'];
-        }else {users = null}
+        } else {
+            users = null
+        }
         return users;
     }
 }
