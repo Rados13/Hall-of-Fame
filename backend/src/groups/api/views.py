@@ -1,28 +1,17 @@
 from groups.queries import Querying
+from marks.models import Mark
 from rest_framework import generics, mixins, status
 from rest_framework.response import Response
 from .serializers import GroupSerializer
 from djongo.models import Q
 from .permissions import *
-from groups.models import Group, Enrolled, Mark
-from ..stats import *
-from students.api.serializers import StudentGroupsSerializer
-from lectures.api.serializers import LectureGroupsSerializer
-from students.models import StudentGroups
-from lectures.models import LectureGroups
+from ..models import Group, Enrolled
 
-
-def get_lectures_names_in_dict(elem):
-    return list(
-        map(lambda x: {'first_name': x.lecture.first_name, 'last_name': x.lecture.last_name, 'id': x.lecture.pk},
-            elem.lectures_list))
-
-
-def get_student_names_in_dict(elem):
-    return list(
-        map(lambda x: {'first_name': x.student.first_name, 'last_name': x.student.last_name,
-                       'id': x.student.pk},
-            elem.enrolled_list))
+from groups.stats import *
+from studentsGroups.api.serializers import StudentGroupsSerializer
+from lecturesGroups.api.serializers import LectureGroupsSerializer
+from studentsGroups.models import StudentGroups
+from lecturesGroups.models import LectureGroups
 
 
 class GroupAPIView(mixins.CreateModelMixin, generics.ListAPIView):
@@ -31,7 +20,7 @@ class GroupAPIView(mixins.CreateModelMixin, generics.ListAPIView):
     permission_classes = [ReadOnly]
 
     def get(self, request, *args, **kwargs):
-        queryset = Group.objects.all()
+        queryset = Group.objects.filter(course_end=False)
         user = get_user_from_request(request)
         if user.is_student:
             groups = list(StudentGroups.objects.filter(user__pk=user.pk))
@@ -107,7 +96,7 @@ class GroupRUDView(generics.RetrieveUpdateDestroyAPIView):
             for elem in obj.lectures_list:
                 LectureGroupsSerializer().create({"user": elem.lecture, "group": obj}).save()
             obj.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         print(serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -129,14 +118,22 @@ class StudentInGroupRUDView(generics.RetrieveUpdateDestroyAPIView):
 
         if not user.is_student:
             return Response("You are not student so you can't sign for course", status=status.HTTP_400_BAD_REQUEST)
-        students = [elem.student for elem in obj.enrolled_list]
+
+        students = [elem.student for elem in obj.enrolled_list] if obj.enrolled_list is not None else []
         if user in students:
             return Response("You are already sign for that course", status=status.HTTP_400_BAD_REQUEST)
-        lectures = [elem.lecture for elem in obj.lectures_list]
+
+        lectures = ([elem.lecture for elem in obj.lectures_list] if obj.lectures_list is not None else [])
         if user in lectures:
             return Response("You are already lecture in this group", status=status.HTTP_400_BAD_REQUEST)
-        obj.enrolled_list.append(Enrolled(student=user))
+
+        if obj.enrolled_list is not None:
+            obj.enrolled_list.append(Enrolled(student=user))
+        else:
+            obj.enrolled_list = [Enrolled(student=user)]
+
         serializer = self.get_serializer(data=self.get_serializer(obj).data)
+
         if serializer.is_valid():
             student_groups = StudentGroupsSerializer().create(
                 {"user": get_user_from_request(request), "group": self.get_object()})
@@ -177,7 +174,7 @@ class MarkAllPostView(generics.RetrieveUpdateDestroyAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def append_mark_to_student(self, student, marks, mark_name, max_points):
-        student.marks_list.append(Mark(for_what=mark_name, **marks[str(student.student.pk)], max_points=max_points))
+        student.add_mark(for_what=mark_name, **marks[str(student.student.pk)], max_points=max_points)
         return student
 
 

@@ -22,10 +22,10 @@ class Querying:
     def get_student_list(self):
         students = self.groups_objects.mongo_aggregate([
             {'$match': {'id': {'$in': self.groups_id}}},
-            {'$project': {'students': '$enrolled_list'}},
+            {'$project': {'studentsGroups': '$enrolled_list'}},
             {'$unwind': '$_id'},
-            # {'$unwind': '$students.marks_list'},
-            {'$group': {'_id': '$students.user_id', 'data': {'$addToSet': '$students.marks_list'}}}
+            # {'$unwind': '$studentsGroups.marks_list'},
+            {'$group': {'_id': '$studentsGroups.user_id', 'data': {'$addToSet': '$studentsGroups.marks_list'}}}
         ])
         students = [elem['data'] for elem in students]
         students = list(chain.from_iterable(students))

@@ -3,8 +3,8 @@
 import axios from 'axios';
 const baseURL = 'http://127.0.0.1:8000/api/groups/';
 const statsURL = 'http://127.0.0.1:8000/api/groups/stats/';
-const lectureURL = 'http://127.0.0.1:8000/api/lectures/';
-const studentURL = 'http://127.0.0.1:8000/api/students/';
+const lectureURL = 'http://127.0.0.1:8000/api/lecturesGroups/';
+const studentURL = 'http://127.0.0.1:8000/api/studentsGroups/';
 
 export default class {
     static async getGroups(){

@@ -18,7 +18,7 @@ def get_id_from_token(request):
 
 
 def get_request_data(request):
-    if request.data == {}:
+    if request.data == {} or 'headers' not in request.data:
         return request.headers
     else:
         return request.data['headers']
