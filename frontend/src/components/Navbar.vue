@@ -38,7 +38,7 @@ export default {
     methods:{
         logout(){
             this.$store.commit({type: 'logout'});
-            this.$router.push('/login');
+            this.$router.push('/');
         }
     }
 }
@@ -48,10 +48,14 @@ export default {
     div {
         display: flex;
         flex-direction: row;
-        margin: 0 10px 0 0;
+        margin: 0;
         padding: 0;
         list-style: none;
         justify-content: center;
+        font-size: large;
+    }
+    a:hover {
+        color: #bebebe;
     }
 </style>
 <style>
@@ -60,8 +64,8 @@ export default {
         display: block;
         color: white;
         text-decoration: none;
-        background-color: black;
-        padding: 10px;
+        /*background-color: black;*/
+        padding: 0 20px;
     }
 </style>
 

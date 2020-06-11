@@ -9,12 +9,14 @@ import CreateGroup from './components/groups/CreateGroup.vue'
 import GroupList from './components/groups/GroupList.vue'
 import GroupPanel from './components/groups/GroupPanel.vue'
 import GroupStudentPanel from './components/groups/GroupStudentPanel.vue'
+import Welcome from "./Welcome";
 
 Vue.config.productionTip = false
 
 Vue.use(VueRouter)
 
 const routes = [
+  { path: '/', component: Welcome },
   { path: '/login', component: Login },
   { path: '/register', component: Register },
   { path: '/students', component: StudentList },

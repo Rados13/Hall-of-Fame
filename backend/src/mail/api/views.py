@@ -2,7 +2,7 @@ from rest_framework import generics, mixins, status
 from rest_framework.response import Response
 from django.core.mail import send_mail, send_mass_mail
 from .permissions import ReadOnly
-from src.groups.api.permissions import get_user_from_request
+from groups.api.permissions import get_user_from_request
 from users.models import User
 
 
