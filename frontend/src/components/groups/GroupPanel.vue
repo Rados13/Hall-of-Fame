@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="groupPanel">
 
         <div v-if="nameChange">
             <p class="course-name">{{group.course}}</p>
@@ -13,7 +13,7 @@
             </form>
         </div>
 
-        <div class="groupPanel">
+        <div class="groupList">
             <div class="list-item">
                 <p>Course ended: <input type='checkbox' v-bind:active=group.course_end v-model='group.course_end'/></p>
 
@@ -262,11 +262,11 @@
 
 
 <style scoped>
+
+    /*#groupPanel {*/
+    /*    padding-top: 20px;*/
+    /*}*/
+
     @import './stylesheet.css';
 
-    .groupPanel {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        /*grid-column-gap: 80px;*/
-    }
 </style>

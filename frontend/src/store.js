@@ -11,6 +11,8 @@ export const store = new Vuex.Store({
         isLecture: false, 
         isAdmin: false,
         isLogged: false,
+        firstName: 'none',
+        lastName: 'none',
         groups: [],
     },
     getters:{},
@@ -20,6 +22,8 @@ export const store = new Vuex.Store({
                 state.isStudent = data.is_student;
                 state.isLecture = data.is_lecture;
                 state.isAdmin = data.is_admin;
+                state.firstName = data.first_name;
+                state.lastName = data.last_name;
                 state.isLogged = true;
             }).catch(error => console.log(error));
         },

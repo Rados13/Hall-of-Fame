@@ -20,8 +20,8 @@
 
 <script lang="js">
 
-  import Login from "./components/users/Login";
-  import Register from "./components/users/Register";
+  import Login from "./users/Login";
+  import Register from "./users/Register";
   export default  {
     name: 'welcome',
     components: {Register, Login},

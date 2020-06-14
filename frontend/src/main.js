@@ -9,7 +9,7 @@ import CreateGroup from './components/groups/CreateGroup.vue'
 import GroupList from './components/groups/GroupList.vue'
 import GroupPanel from './components/groups/GroupPanel.vue'
 import GroupStudentPanel from './components/groups/GroupStudentPanel.vue'
-import Welcome from "./Welcome";
+import Welcome from "./components/Welcome";
 
 Vue.config.productionTip = false
 
@@ -21,7 +21,7 @@ const routes = [
   { path: '/register', component: Register },
   { path: '/studentsGroups', component: StudentList },
   { path: '/addGroup', component: CreateGroup },
-  { path: '/groupsSecond', component: GroupList, props: {type: "all"}},
+  { path: '/groups', component: GroupList, props: {type: "all"}},
   { path: '/studentgroups', component: GroupList, props:{type: "student"}},
   { path: '/studentgroups/:groupID', component: GroupStudentPanel, props:{type: "student"}},
   { path: '/lecturegroups', component: GroupList, props:{type: "lecture"}},

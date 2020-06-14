@@ -53,5 +53,5 @@ class UserInfo(generics.RetrieveAPIView):
 
     def get(self, request, *args, **kwargs):
         obj = list(User.objects.filter(pk=get_id_from_token(request)))[0]
-        info = {'is_lecture': obj.is_lecture, 'is_student': obj.is_student, 'is_admin': obj.is_superuser}
+        info = {'is_lecture': obj.is_lecture, 'is_student': obj.is_student, 'is_admin': obj.is_superuser, 'first_name': obj.first_name, 'last_name': obj.last_name}
         return Response(info, status=status.HTTP_200_OK)

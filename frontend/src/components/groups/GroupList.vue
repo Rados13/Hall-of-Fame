@@ -49,11 +49,6 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-    .groupList {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        /*grid-column-gap: 80px;*/
-    }
 
     /*.entry{*/
     /*    margin: 40px 0;*/

@@ -59,4 +59,4 @@ class UserAPITestCase(APITestCase):
 
         response = self.client.get(url)
         self.assertEqual(response.status_code,status.HTTP_200_OK)
-        self.assertEqual(json.loads(response.content),{"is_student":True,"is_lecture":False,"is_admin":False})
+        self.assertEqual(json.loads(response.content),{"is_student":True,"is_lecture":False,"is_admin": False, "first_name":'John', "last_name": "Snow"})
