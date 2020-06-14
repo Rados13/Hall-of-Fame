@@ -7,8 +7,11 @@
         </div>  
         <div v-else>
             <form action='#' @submit.prevent = "updateLecture()">
-                <p>Name: <input type='text' v-bind:first_name=first_name v-model='first_name'>
-                Last name: <input type='text' v-bind:last_name=last_name v-model='last_name'></p>
+                <select v-model="newLecture">
+                        <option v-bind:key="elem.pk" v-for='elem in lectures' v-bind:value="elem.pk"> 
+                            {{elem.last_name}} {{elem.first_name}}
+                        </option>
+                </select>
                 <p><input type='submit' value='Submit' ></p>
             </form>
         </div>
@@ -18,11 +21,12 @@
 
 export default {
     name: "GroupLecture",
-    props: ['lecture'],
+    props: ['lecture','lectures'],
     data(){
         return {
         first_name: "",
         last_name: "",  
+        newLecture: null,
         change: false,
         }
     },
@@ -36,7 +40,7 @@ export default {
     methods:{
         updateLecture(){
             this.change = !this.change;
-            this.$emit('updateLecture',this.lecture,this.first_name,this.last_name);
+            this.$emit('updateLecture',this.lecture,this.lectures.filter(elem => elem.pk === this.newLecture)[0]);
         }
     }
 }

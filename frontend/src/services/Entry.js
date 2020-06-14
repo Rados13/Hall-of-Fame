@@ -29,7 +29,7 @@ export default class Entry {
         await axios.post(tokenURL, {email: email, password: password}).then(response => {
             localStorage.setItem("accessToken", response.data.access);
             localStorage.setItem("refreshToken", response.data.refresh);
-            this.$router.push('/studentsGroups');
+            this.$router.push('/groups');
         }).catch(error => {
             console.log(error);
         });
@@ -41,8 +41,13 @@ export default class Entry {
         }).then(data => {
             return data.data;
         }).catch(error => console.log(error));
-        console.log(x);
         return x
+    }
+
+    static async patchUserData(data,userID){
+        await axios.patch(registerURL+userID+"/", {
+            headers: {Authorization: `Bearer ${localStorage.getItem("accessToken")}`},
+            user: data,}).catch(error => console.log(error));
     }
 
     static async refreshToken() {
@@ -59,8 +64,29 @@ export default class Entry {
         return await axios.get(registerURL, {
             headers: {Authorization: `Bearer ${localStorage.getItem("accessToken")}`}
         }).then(response => {
-
             return response.data;
+        }).catch(e => {
+            console.error(e);
+        });
+    }
+
+    static async getUserByID(userID){
+        return await axios.get(registerURL+userID+"/", {
+            headers: {Authorization: `Bearer ${localStorage.getItem("accessToken")}`}
+        }).then(response => {
+            return response.data;
+        }).catch(error => console.log(error));
+    }
+
+    static async getLectures(lecturesList = null){
+        return await axios.get(registerURL+"lectures/",{
+            headers: {Authorization: `Bearer ${localStorage.getItem("accessToken")}`}
+        }).then(response => {
+            if(lecturesList==null)return response.data;
+            else {
+                lecturesList = lecturesList.map(elem => elem.lecture.pk);
+                return response.data.filter(elem => !lecturesList.includes(elem.pk));
+            }
         }).catch(e => {
             console.error(e);
         });

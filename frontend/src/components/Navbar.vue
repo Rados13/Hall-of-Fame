@@ -9,9 +9,11 @@
             <ul> <router-link to="/studentgroups">My student groups</router-link> </ul>
         </div>
         <div v-if="isLecture">
-            <ul> <router-link to="/students">User data</router-link> </ul>
             <ul> <router-link to="/addGroup">Create group</router-link> </ul>
             <ul> <router-link to="/lecturegroups">My lecture groups</router-link> </ul>
+        </div>
+        <div v-if="isAdmin">
+            <ul> <router-link to="/users">User data</router-link> </ul>
         </div>
         <div v-if="isLogged">
             <ul><a @click="logout">Logout</a></ul>
@@ -30,6 +32,9 @@ export default {
         },
         isStudent(){
             return this.$store.state.isStudent || this.$store.state.isAdmin;
+        },
+        isAdmin(){
+            return this.$store.state.isAdmin;
         },
         isLogged(){
             return this.$store.state.isLogged;

@@ -21,25 +21,21 @@
                        value="Calculate final grade for all students"/>
 
                 <div class="buttons">
-                    <button @click="deleteGroup()" class='button'>Delete course</button>
                     <button @click="updateGroup()" class='button'>Save changes</button>
                 </div>
 
             </div>
 
             <div class="list-item">
-
                 <div v-bind:key="lecture.lecture_id" v-for="lecture in group.lectures_list">
-                    <GroupLecture v-bind:lecture="lecture" @updateLecture="updateLecture"
-                                  @deleteLecture="deleteLecture"/>
+                    <GroupLecture v-bind:lecture="lecture" v-bind:lectures="lectures"
+                    @updateLecture="updateLecture"   @deleteLecture="deleteLecture"/>
                 </div>
-
                 <div v-if="addLectureBool">
-                    <GroupLecture v-bind:lecture="null" @updateLecture="addLecture"
-                                  @deleteLecture="addLectureBool=false"/>
+                    <GroupLecture v-bind:lecture="null" v-bind:lectures="lectures" 
+                    @updateLecture="addLecture" @deleteLecture="addLectureBool=false"/>
                 </div>
                 <button @click="addLectureBool= !addLectureBool" class='button'>Add lecture</button>
-
             </div>
 
 
@@ -149,39 +145,33 @@
                 groupStatsDictionary: null,
                 mailButtonText: "Create mail to students",
                 sendMail: false,
-                statsLink: ""
+                statsLink: "",
+                lectures: Object,
             }
         },
         created() {
             GroupRUD.getGroup(this.$route.params.groupID).then(data => {
                 this.group = data;
+                Entry.getLectures(this.group.lectures_list).then(data => {
+                     this.lectures = data;
+                });
             });
         },
         methods: {
             updateGroup() {
                 GroupRUD.updateGroup(this.group);
             },
-            async deleteGroup() {
-                GroupRUD.deleteGroup(this.group.pk);
-                await this.$router.push('/groups');
-            },
 
             changeCourseName() {
                 this.nameChange = !this.nameChange;
             },
-            addLecture(lecture, firstName, lastName) {
-                new Entry().getUser(firstName, lastName).then(data => {
-                    if (data !== null) this.group.lectures_list.push({"lecture": data, "main_lecture": false});
-                });
+            addLecture(lecture, newLecture) {
+                this.group.lectures_list.push({"lecture": newLecture, "main_lecture": false});
                 this.addLectureBool = false;
             },
-            updateLecture(lecture, firstName, lastName) {
-                new Entry().getUser(firstName, lastName).then(data => {
-                    if (data !== null) {
-                        var newLecture = this.group.lectures_list.filter(elem => elem.lecture.pk === lecture.pk)[0];
-                        newLecture.lecture = data[0];
-                    }
-                }).catch(e => console.log(e));
+            updateLecture(lecture, lectureData) {
+                        var newLecture = this.group.lectures_list.filter(elem => elem.lecture.pk === lecture.lecture.pk)[0];
+                        newLecture.lecture = lectureData; 
             },
             deleteLecture(elemOfArray) {
                 this.group.lectures_list = this.group.lectures_list.filter(elem => elem.lecture.pk !== elemOfArray.lecture.pk);

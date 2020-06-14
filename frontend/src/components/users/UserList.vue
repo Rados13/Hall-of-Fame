@@ -1,33 +1,40 @@
 <template>
     <div class="hello">
-        <h1>Hello world</h1>
-        <div v-bind:key="student.id" v-for="student in students">
-            <StudentElem v-bind:student="student" v-on:del-student="deleteUser(student.id)"/>
+        <div v-bind:key="user.pk" v-for="user in users">
+            <UserElem v-bind:user="user" @goToAdmin="goToAdminPanel" @delUser="deleteUser"/>
         </div>
     </div>
 </template>
 
 <script>
 
-import StudentElem from './StudentElem.vue';
+import UserElem from './UserElem.vue';
 import Entry from '../../services/Entry.js';
 
 
 export default {
-    name: 'StudentList',
+    name: 'UserList',
     components: {
-        StudentElem
+        UserElem
     },
     data() {
         return {
-            students: []
+            users: []
         }
     },
     created() {
         Entry.getUsers().then(data => {
-            this.students=data;
+            this.users=data;
         });
-    },  
+    },
+    methods:{
+        deleteUser(userID){
+            Entry.patchUserData({"is_active": false}, userID);
+        },
+        goToAdminPanel(userID){
+            this.$router.push({path: '/adminPanel/' + userID});
+        }
+    }  
 }
 </script>
 

@@ -3,7 +3,8 @@ import VueRouter from 'vue-router'
 import App from './App.vue'
 import {store} from './store'
 import Login from './components/users/Login.vue'
-import StudentList from './components/users/StudentList.vue'
+import UserList from './components/users/UserList.vue'
+import AdminPanel from './components/users/AdminPanel.vue'
 import Register from './components/users/Register.vue'
 import CreateGroup from './components/groups/CreateGroup.vue'
 import GroupList from './components/groups/GroupList.vue'
@@ -19,10 +20,11 @@ const routes = [
   { path: '/', component: Welcome },
   { path: '/login', component: Login },
   { path: '/register', component: Register },
-  { path: '/studentsGroups', component: StudentList },
+  { path: '/users', component: UserList },
   { path: '/addGroup', component: CreateGroup },
-  { path: '/groupsSecond', component: GroupList, props: {type: "all"}},
+  { path: '/groups', component: GroupList, props: {type: "all"}},
   { path: '/studentgroups', component: GroupList, props:{type: "student"}},
+  { path: '/adminPanel/:userID', component: AdminPanel},
   { path: '/studentgroups/:groupID', component: GroupStudentPanel, props:{type: "student"}},
   { path: '/lecturegroups', component: GroupList, props:{type: "lecture"}},
   { path: '/lecturegroups/:groupID', component: GroupPanel, props:{type: "student"}}

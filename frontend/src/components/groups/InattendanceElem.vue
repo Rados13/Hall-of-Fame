@@ -7,10 +7,8 @@
         </div>  
         <div v-else>
             <form action='#' @submit.prevent = "changeInattendance()">
-                <p>
-                <input type='number' v-bind:classNum=classNum v-model='classNum'>
-                <input type='checkbox' v-bind:justified=justified v-model='justified'>
-                </p>
+                <p> Class num: <input type='number' v-bind:classNum=classNum v-model='classNum'> </p>
+                <p> Justified: <input type='checkbox' v-bind:justified=justified v-model='justified'> </p>
                 <p><input type='submit' value='Submit' ></p>
             </form>
         </div>

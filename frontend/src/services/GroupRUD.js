@@ -43,12 +43,6 @@ export default class {
         }).catch(e => console.error(e));
     }
 
-    static async deleteGroup(id){
-      await axios.delete(baseURL+id+'/',{
-        headers: {Authorization: `Bearer ${localStorage.getItem("accessToken")}`}
-      }).catch(e=> console.error(e));
-    }
-
     static async updateGroup(group){
       await axios.patch(baseURL+group.pk+'/',{
         headers: {Authorization: `Bearer ${localStorage.getItem("accessToken")}`},

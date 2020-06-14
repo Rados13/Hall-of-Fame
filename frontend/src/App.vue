@@ -3,21 +3,17 @@
         <!--        <h1 id="title">Hall of Fame</h1>-->
         <NavbarApp v-if="isLogged" />
         <router-view></router-view>
-        <!--        <Welcome v-if="!isLogged" />-->
-
     </div>
 </template>
 
 <script>
 
     import NavbarApp from './components/Navbar';
-    // import Welcome from "./Welcome";
 
 
     export default {
         beforeCreate: function () {
             document.body.classList.add('home');
-            console.log("Happen");
         },
         name: 'App',
         components: {
@@ -67,8 +63,4 @@
         background-color: #545454;
     }
 
-    *{
-        /*margin: 0;*/
-
-    }
 </style>

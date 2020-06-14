@@ -32,10 +32,11 @@ export const store = new Vuex.Store({
             localStorage.setItem('refreshToken','');
         },
         refreshToken(state){
-            console.log("Try");
             if(state.isLogged){
                 Entry.refreshToken();    
                 this.dispatch('refreshThread');
+            }else{
+                this.$router.push('/');
             }
         },
         getGroups(state,param){

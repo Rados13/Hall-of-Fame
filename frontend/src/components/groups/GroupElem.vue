@@ -1,9 +1,7 @@
 <template>
-    <!-- <div v-bind:class="{'styleclass':value}"> If value is True set styleclass on this div -->
     <div class="list-item">
         <div id="courseName">
             <p>{{group.course}}</p>
-            <!-- <input type="checkbox" v-on:change="markComplete"> -->
         </div>
         <div v-bind:key="dateTime.day_of_week" v-for="dateTime in group.date_time">
             <p> Day: {{dateTime.day_of_week}} time: {{dateTime.time}}</p>
