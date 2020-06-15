@@ -43,7 +43,7 @@
                 <div v-bind:key="dateTime.day_of_week" v-for="dateTime in group.date_time">
                     <GroupDateTime v-bind:dateTime="dateTime" @updateDateTime="updateTerm" @deleteTerm="deleteTerm"/>
                 </div>
-                <button @click="addTerm" class="button">Add term</button>
+                <button @click="addTerm" class="button">Add date</button>
 
             </div>
 
@@ -152,6 +152,7 @@
         created() {
             GroupRUD.getGroup(this.$route.params.groupID).then(data => {
                 this.group = data;
+                console.log(this.group);
                 Entry.getLectures(this.group.lectures_list).then(data => {
                      this.lectures = data;
                 });
@@ -252,6 +253,7 @@
 
 
 <style scoped>
+
 
     /*#groupPanel {*/
     /*    padding-top: 20px;*/

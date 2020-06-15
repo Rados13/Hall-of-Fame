@@ -1,6 +1,6 @@
 <template>
          <div v-if="!change">
-            <p> Day: {{dateTime.day_of_week}} hour of start: {{dateTime.time}} 
+            <p> Day: {{dateTime.day_of_week}}   time: {{dateTime.time}}
                 <button @click="change=!change" class='button'>Modify</button>
                 <button @click="$emit('deleteTerm',dateTime)" class="del">X</button>               
             </p>

@@ -1,6 +1,6 @@
 <template>
-    <div class="hello">
-        <div v-bind:key="user.pk" v-for="user in users">
+    <div class="hello groupList">
+        <div v-bind:key="user.pk" v-for="user in users" class="list-item">
             <UserElem v-bind:user="user" @goToAdmin="goToAdminPanel"/>
         </div>
     </div>
@@ -37,6 +37,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
+    @import "../groups/stylesheet.css";
+
     h3 {
         margin: 40px 0 0;
     }

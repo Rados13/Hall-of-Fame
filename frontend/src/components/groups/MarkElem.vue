@@ -1,6 +1,6 @@
 <template>
          <div v-if="!change">
-            <p> Value: {{mark.value}} / {{mark.max_points}} | For what: {{mark.for_what}} |  Additional note: {{mark.note}}
+            <p> {{mark.value}} / {{mark.max_points}} | {{mark.for_what}} |  Note: {{mark.note}}
                 <button @click="change=!change" class='button'>Modify</button>
                 <button @click="$emit('deleteMark',mark)" class="del">X</button>               
             </p>
