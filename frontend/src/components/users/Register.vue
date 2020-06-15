@@ -3,10 +3,10 @@
         <p>{{text}}</p>
         <h1>Register</h1>
         <form action='#' @submit.prevent='register'>
-            <p><input type='text' placeholder="email" v-model='email'></p>
+            <p><input type='email' placeholder="email" v-model='email'></p>
             <p><input type='text' placeholder="First name" v-model='first_name'></p>
             <p><input type='text' placeholder="Last name" v-model='last_name'></p>
-            <p><input type='text' placeholder="password" v-model='password'></p>
+            <p><input type='password' placeholder="password" v-model='password'></p>
             <p><input type='submit' value='Submit'></p>
         </form>
     </div>
