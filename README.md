@@ -202,7 +202,7 @@ permissions, routing and views that expose REST interface.
 | LectureGroups          | Holds list of groups of a lecturer       |
 | Mail                   | Allows sending mails from app    |
 | Marks                  | Holds single mark with details       |
-| Media                  |POST - add user to database       |
+| Media                  | Folder for exposing generated plots     |
 | StudentGroups          | Holds list of groups of a student        |
 | Users                  | Manages user details, used for authorization       |
 
