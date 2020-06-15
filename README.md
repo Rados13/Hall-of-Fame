@@ -54,6 +54,104 @@ To run frontend application
 npm run serve
 ```
 
+## Database
+
+The database consists of four main collections.
+
+1. Users collection
+
+Example document
+```
+{
+    "_id" : ObjectId("5edd34f030698aae6284e52a"),
+    "id" : 1,
+    "password" : "pbkdf2_sha256$150000$SxUiEQph53yd$nrqSKPR0jNB6nORvFJbnwMwSUGDZANjE4fNaFq0HdkU=",
+    "last_login" : ISODate("2020-06-07T18:42:37.858Z"),
+    "is_superuser" : true,
+    "is_staff" : true,
+    "is_active" : true,
+    "date_joined" : ISODate("2020-06-07T18:41:51.786Z"),
+    "first_name" : "John",
+    "last_name" : "Tester",
+    "email" : "test@test.com",
+    "is_lecture" : true,
+    "is_student" : true
+}
+```
+
+2. Group collection
+
+Example document
+```
+{
+    "_id" : ObjectId("5edf6c3a842d5e7cdf572ed9"),
+    "id" : 1,
+    "course" : "Python",
+    "date_time" : [ 
+        {
+            "day_of_week" : "Monday",
+            "time" : ISODate("1900-01-01T12:50:00.000Z")
+        }
+    ],
+    "lectures_list" : [ 
+        {
+            "lecture_id" : 1,
+            "main_lecture" : true
+        }
+    ],
+    "enrolled_list" : [ 
+        {
+            "student_id" : 2,
+            "inattendances_list" : [ 
+                {
+                    "class_num" : 2,
+                    "justified" : true
+                }
+            ],
+            "marks_list" : [ 
+                {
+                    "value" : 50,
+                    "max_points" : 100,
+                    "for_what" : "Exam",
+                    "note" : "Luckily"
+                }
+            ],
+            "final_grade" : null
+        }
+    ],
+    "course_end" : false
+}
+```
+
+3. Lecture Groups
+
+
+Example document
+```
+{
+    "_id" : ObjectId("5edf6c3a842d5e7cdf572eda"),
+    "id" : 1,
+    "user_id" : 1,
+    "groups_list_id" : [ 
+        1
+    ]
+}
+```
+
+4. Student Groups
+
+Example document
+```
+{
+    "_id" : ObjectId("5ee5f1e83931ad637f50e76b"),
+    "id" : 1,
+    "user_id" : 2,
+    "groups_list_id" : [ 
+        1
+    ]
+}
+```
+
 ## Backend details
 
 Short description of all REST API endpoints for GET request method
