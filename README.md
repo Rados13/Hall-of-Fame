@@ -184,6 +184,27 @@ Short description of endpoints for other request method
 | `/api/mail/`               |POST - send mail to users included in request and with specified text                        |
 
 
+### Implementation description
+
+Backend is divided into apps. Apps contain models mapped to database, serializers for presenting data, and in api subfolders:
+permissions, routing and views that expose REST interface.
+
+#### Django Apps
+
+| App                       | Description                   |
+|:--------------------------|:------------------------------|
+| HallOfFame             | Main component, holds routing, settings  |
+| DayTime                | Holds information about class time       |
+| Enrolled              | Entry of student in class       |
+| Groups                 | Entry about a class, holds students and details      |
+| Inattendance           | Holds information about inattendance       |
+| Lecturer               | Entry of lecturer in class       |
+| LectureGroups          | Holds list of groups of a lecturer       |
+| Mail                   | Allows sending mails from app    |
+| Marks                  | Holds single mark with details       |
+| Media                  |POST - add user to database       |
+| StudentGroups          | Holds list of groups of a student        |
+| Users                  | Manages user details, used for authorization       |
 
 ## Frontend details
 
