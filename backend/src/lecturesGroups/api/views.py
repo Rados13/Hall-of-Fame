@@ -12,10 +12,12 @@ class LecturesAPIView(mixins.CreateModelMixin, generics.ListAPIView):
     permission_classes = [ReadOnly, IsAdminUser]
 
     def get(self, request, *args, **kwargs):
-        queryset = list(LectureGroups.objects.all())
+        pk = self.kwargs.get('pk')
+        queryset = LectureGroups.objects.filter(user_id=pk)
+        if len(queryset) == 0:
+            return Response(None, status=status.HTTP_204_NO_CONTENT)
         obj = queryset[0]
-        result = {'user': UserSerializer(obj.user).data,
-                  'groupsSecond': [PartGroupSerializer(elem).data for elem in obj.groups_list.all()]}
+        result = [PartGroupSerializer(elem).data for elem in obj.groups_list.all()]
         return Response(result, status=status.HTTP_200_OK)
 
 

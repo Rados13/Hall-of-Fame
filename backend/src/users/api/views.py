@@ -41,6 +41,7 @@ class UserRUDView(generics.RetrieveUpdateDestroyAPIView):
         serialized['is_lecture'] = obj.is_lecture
         serialized['is_student'] = obj.is_student
         serialized['is_admin'] = obj.is_staff
+        serialized['is_active'] = obj.is_active
         serialized.pop('password', None)
         return Response(serialized, status=status.HTTP_200_OK)
 

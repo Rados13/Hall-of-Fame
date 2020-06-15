@@ -1,7 +1,7 @@
 <template>
     <div class="hello">
         <div v-bind:key="user.pk" v-for="user in users">
-            <UserElem v-bind:user="user" @goToAdmin="goToAdminPanel" @delUser="deleteUser"/>
+            <UserElem v-bind:user="user" @goToAdmin="goToAdminPanel"/>
         </div>
     </div>
 </template>
@@ -28,9 +28,6 @@ export default {
         });
     },
     methods:{
-        deleteUser(userID){
-            Entry.patchUserData({"is_active": false}, userID);
-        },
         goToAdminPanel(userID){
             this.$router.push({path: '/adminPanel/' + userID});
         }

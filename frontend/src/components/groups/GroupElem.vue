@@ -9,7 +9,7 @@
         <div v-bind:key="elem.pk" v-for="elem in group.lectures_list">
             <p> Lecturer: {{elem.lecture.first_name}} {{elem.lecture.last_name}}</p>
         </div>
-        <div class="buttons">
+        <div class="buttons" v-if="!toWatch">
             <button v-if="!isStudent && !isLecture && $store.state.isLogged" @click="signFor(group.pk)" class='button'>
                 Sign for course
             </button>
@@ -26,7 +26,7 @@
 
     export default {
         name: "GroupElem",
-        props: ['group', 'isStudent', 'isLecture'],
+        props: ['group', 'isStudent', 'isLecture', 'toWatch'],
         data() {
             return {
                 lectures: [],

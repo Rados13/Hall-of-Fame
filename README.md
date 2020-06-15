@@ -39,6 +39,11 @@ If you want to see django admin-page you have to create super-user
 python3 manage.py createsuperuser
 ```
 
+If you want to run unit tests
+```
+python3 manage.py test
+```
+
 First install all npm packages
 ```npm
 npm i
@@ -56,13 +61,14 @@ Short description of all REST API endpoints for GET request method
 |:--------------------------|:------------------------------|
 | `/api/users/`              |returns list of all server users       |
 | `/api/users/info/`         |returns information about who is user (student/lecture/admin)                               |
+| `/api/users/{"students"/"lectures"}/`         |returns list of all students/lectures                               |
 | `/api/groups/`             |returns list of groups with basic information about them                               |
 | `/api/groups/stats/`       |returns stats from groups which ids are sended in request and link to historgram of average data|
 | `/api/groups/{group_id}`   |returns data about this group                                |
-| `/api/lectures/`           |returns list of groups in which user who send request is or was lecture                               |
-| `/api/lectures/list/`      |returns list of all lectures and groups in which they are or were lecture                               |
-| `/api/students/`           |returns list of groups in which user who send request is or was student                               |
-| `/api/students/list/`      |returns list of all lectures and groups in which they are or were lecture                               |
+| `/api/lecturesGroups/`           |returns list of groups in which user who send request is or was lecture                               |
+| `/api/lecturesGroups/list/{user_id}`      |returns list of groups of specified user in which he is or was lecture                               |
+| `/api/studentsGroups/`           |returns list of groups in which user who send request is or was student                               |
+| `/api/studentsGroups/list/{user_id}`      |returns list of groups of specified user in which he is or was student                               |
 | `/api/token/`              |return access token and refresh token to REST API server                               |
 
 
@@ -71,7 +77,7 @@ Short description of endpoints for other request method
 | url                       | description                   |
 |:--------------------------|:------------------------------|
 | `/api/users/`              |POST - add user to database       |
-| `/api/users/{user_id}`     |UPDATE - Change info about user permissions         |
+| `/api/users/{user_id}`     |PATCH - Change info about user permissions         |
 | `/api/groups/{group_id}`   |PATCH - update info about this group                                |
 | `/api/groups/{group_id}/markAll/`|POST - add mark for all student in group                                |
 | `/api/groups/{group_id}/finalGrade/`|POST - calculate final grade for all students in group                                |

@@ -10,11 +10,16 @@ class StudentsAPIView(mixins.CreateModelMixin, generics.ListAPIView):
     serializer_class = StudentGroupsSerializer
     permission_classes = [ReadOnly, IsAdminUser]
 
+    def get_queryset(self):
+        return StudentGroups.objects.all()
+
     def get(self, request, *args, **kwargs):
-        queryset = list(StudentGroups.objects.all())
+        pk = self.kwargs.get("pk")
+        queryset = StudentGroups.objects.filter(user_id=pk)
+        if len(queryset) == 0:
+            return Response(None, status=status.HTTP_204_NO_CONTENT)
         obj = queryset[0]
-        result = {'user': UserSerializer(obj.user).data,
-                  'groups': [PartGroupSerializer(elem).data for elem in obj.groups_list.all()]}
+        result = [PartGroupSerializer(elem).data for elem in obj.groups_list.all()]
         return Response(result, status=status.HTTP_200_OK)
 
 

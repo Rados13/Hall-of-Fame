@@ -16,24 +16,37 @@ export default class {
         console.error(e);
       });  
     }
+    
     static async getLectureGroups(){
       return await axios.get(lectureURL, {
         headers: {Authorization: `Bearer ${localStorage.getItem("accessToken")}`}
       }).then(response => {return response.data;}).catch(e=> console.error(e));
     }  
+    
     static async getStudentGroups(){
       return await axios.get(studentURL, {
         headers: {Authorization: `Bearer ${localStorage.getItem("accessToken")}`}
       }).then(response => {return response.data;}).catch(e=> console.error(e)); 
     }
-    static async getGroup(id){
-      return await axios.get(baseURL+id+'/',{
+
+    static async getStudentGroupsUser(userID){
+      return await axios.get(studentURL+"list/"+userID+"/", {
         headers: {Authorization: `Bearer ${localStorage.getItem("accessToken")}`}
-      }).then(response =>{
-        return response.data;
-      }).catch(e =>{
-      console.error(e);
-    });  
+      }).then(response => {return response.data;}).catch(e => console.error(e));
+    }
+
+    static async getLectureGroupsUser(userID){
+      return await axios.get(lectureURL+"list/"+userID+"/", {
+        headers: {Authorization: `Bearer ${localStorage.getItem("accessToken")}`}
+      }).then(response => {return response.data;}).catch(e => console.error(e));
+    }
+
+    static async getGroup(id){
+        return await axios.get(baseURL+id+'/',{
+          headers: {Authorization: `Bearer ${localStorage.getItem("accessToken")}`}
+        }).then(response =>{
+          return response.data;
+        }).catch(e =>{  console.error(e);});  
     }
   
     

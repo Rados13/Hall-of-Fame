@@ -1,8 +1,7 @@
 <template>
     <div class="list-item"> 
         <p> {{user.first_name}} {{user.last_name}} </p>         
-        <p><button @click="$emit('goToAdmin',user.pk)">Go to admin panel</button></p>
-        <button @click="$emit('deleteUser',user.pk)" class='del'>X</button>
+        <p><button class="button" @click="$emit('goToAdmin',user.pk)">Go to admin panel</button></p>
     </div>
 </template>
 
@@ -23,20 +22,15 @@ export default {
         display: flex;
         flex-direction: column;
         justify-content: center;
-
     }
 
-
-    .del {
-    background: #ff0000;
+    .button {
+    background: #393939;
     color: #fff;
     border: none;
-    padding: 5px 9px;
-    border-radius: 50%;
-    height: 50%;
-    justify-self: center;
+    padding: 8px 20px 12px 20px;
+    margin: 1%;
     align-self: center;
     cursor: pointer;
-    float: right;
-  }
+    }
 </style>
