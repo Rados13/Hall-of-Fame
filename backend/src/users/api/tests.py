@@ -12,7 +12,7 @@ User = get_user_model()
 class UserAPITestCase(APITestCase):
 
     def setUp(self):
-        user_obj = User(email='test@test.com', first_name="John", last_name="Snow")
+        user_obj = User(email='test@test.com', first_name="John", last_name="Snow", is_staff=True)
         user_obj.set_password("randPassword")
         user_obj.save()
 
@@ -38,17 +38,21 @@ class UserAPITestCase(APITestCase):
         self.assertEqual(User.objects.count(), 2)
         self.assertEqual(User.objects.get(first_name='Harry').last_name, 'Potter')
 
-    # Problem with status
-    # def test_update_user_info(self):
-    #     user = User.objects.get(first_name='John')
-    #     self.client.force_authenticate(user=user)
-    #
-    #     url = reverse('users:user-rud', args=[user.pk])
-    #     data = {'is_lecture': True}
-    #
-    #     response = self.client.patch(url, data, format='json')
-    #     self.assertEqual(response.status_code, status.HTTP_200_OK)
-    #     self.assertEqual(User.objects.filter(is_lecture=True), 1)
+    def authorize_client_lecture(self):
+        user = User.objects.get(email='test@test.com')
+        token = RefreshToken.for_user(user)
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + str(token.access_token))
+
+    def test_update_user_info(self):
+        user = User.objects.get(first_name='John')
+        self.authorize_client_lecture()
+
+        url = reverse('users:user-rud', args=[user.pk])
+        data = {'user': {'is_lecture': True}}
+
+        response = self.client.patch(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(User.objects.filter(is_lecture=True)), 1)
 
     def test_get_info(self):
         user = User.objects.get(first_name='John')
@@ -58,5 +62,7 @@ class UserAPITestCase(APITestCase):
         url = reverse('users:user-info')
 
         response = self.client.get(url)
-        self.assertEqual(response.status_code,status.HTTP_200_OK)
-        self.assertEqual(json.loads(response.content),{"is_student":True,"is_lecture":False,"is_admin":False})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(json.loads(response.content),
+                         {"is_student": True, "is_lecture": False, "is_admin": False, "first_name": 'John',
+                          "last_name": "Snow"})

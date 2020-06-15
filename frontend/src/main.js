@@ -10,7 +10,7 @@ import CreateGroup from './components/groups/CreateGroup.vue'
 import GroupList from './components/groups/GroupList.vue'
 import GroupPanel from './components/groups/GroupPanel.vue'
 import GroupStudentPanel from './components/groups/GroupStudentPanel.vue'
-import Welcome from "./Welcome";
+import Welcome from "./components/Welcome";
 
 Vue.config.productionTip = false
 
