@@ -17,5 +17,10 @@ export default {
 </script>
 
 <style scoped>
-@import './stylesheet.css';    
+    @import './stylesheet.css';
+
+    img {
+        width: 500px;
+    }
+
 </style>
