@@ -194,10 +194,9 @@ class StatsAPIView(generics.ListAPIView):
         result = avg_points_by_label(marks, list(marks_names))
         result_norm = normalized_avg_points_by_label(marks, list(marks_names))
 
-        normalized_avg_points_by_label(marks, list(marks_names))
-
         students = obj.get_student_list()
         result['total'] = avg_points_all_students(students)
+        result_norm['total'] ={'val': result['total']['val']/result['total']['max_points'], 'max_points': 1}
 
         result['link'] = plot_data(str(groups_id) + "stats", result_norm, request.get_host())
 

@@ -93,8 +93,9 @@ def plot_data(plot_name, data, host):
     # ax.bar(ind, diffrences, bottom=values, color='r', label='Max', tick_label=whats)
 
     ax.set_ylabel('Percentage')
+    ax.set_xlabel('Marks')
     ax.set_title("Average per exercise")
-    ax.legend()
+    # ax.legend()
     ax.set_xticks(ind)
     ax.set_xticklabels(whats)
     a = plt.gca()
@@ -105,8 +106,9 @@ def plot_data(plot_name, data, host):
     plt.savefig(path)
     url = os.path.join(MEDIA_URL, plot_name)
     return host + url
-#
-#
+
+
+
 # def plot_data(plot_name, data, host):
 #     fig, ax = plt.subplots()
 #
